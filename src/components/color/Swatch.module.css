@@ -1,0 +1,46 @@
+.swatch {
+  flex: 1;
+  min-width: var(--swatch-min-w, 22px);
+  height: var(--swatch-h, 42px);
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-sm);
+  padding: 0;
+  position: relative;
+  transition: transform 80ms ease;
+}
+
+.swatch:hover {
+  transform: scale(1.06);
+  z-index: 1;
+}
+
+/* Modified swatches get a contrast-coloured ring (neutral, visible on any hue). */
+.swatch[data-modified] {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+/* Solid corner dot = hex override. */
+.dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  /* background set inline to black/white by contrast against the swatch. */
+  box-shadow: 0 0 0 1px rgba(127, 127, 127, 0.5);
+}
+
+/* Hollow corner ring = saturation (chroma) change. */
+.ring {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  /* border-color set inline by contrast against the swatch. */
+  box-shadow: 0 0 0 1px rgba(127, 127, 127, 0.45);
+}

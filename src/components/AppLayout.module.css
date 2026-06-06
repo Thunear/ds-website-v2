@@ -1,0 +1,30 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--app-bg);
+  color: var(--app-text);
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.content {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-5) var(--space-6);
+}
+
+.card {
+  background: var(--app-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--app-border);
+  overflow: hidden;
+}
+
+.tabBody {
+  padding: var(--space-6);
+  /* Paints with the mode-pinned token so the canvas follows Lys/Mørk modus. */
+  background: var(--app-surface);
+  color: var(--app-text);
+}

@@ -1,0 +1,177 @@
+.page {
+  /* Shared layout tokens consumed by ScaleRow + header so columns align.
+     Swatches flex to fill the row; only the height and gaps are fixed. */
+  --label-w: 150px;
+  --swatch-h: 46px;
+  --swatch-min-w: 22px;
+  --swatch-gap: 6px;
+  --group-gap: 18px;
+  --actions-w: 56px;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.head h2 {
+  font-size: 20px;
+}
+
+.lead {
+  font-size: 14px;
+  color: var(--app-text-muted);
+  max-width: 640px;
+  margin-top: var(--space-2);
+}
+
+.advancedBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  border: none;
+  background: none;
+  color: var(--app-text-muted);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.advancedBtn svg,
+.addRow svg {
+  width: 18px;
+  height: 18px;
+}
+
+.grid {
+  overflow-x: auto;
+}
+
+.header {
+  display: flex;
+  gap: var(--group-gap);
+  align-items: flex-end;
+}
+
+.headerSpacer {
+  width: var(--label-w);
+  flex: none;
+}
+
+/* Reserves the row-actions column so swatches stay aligned under the header. */
+.headerActionsSpacer {
+  width: var(--actions-w);
+  flex: none;
+}
+
+.headerGroups {
+  display: flex;
+  gap: var(--group-gap);
+  flex: 1;
+  min-width: 0;
+}
+
+.headerGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.groupTitle {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--app-border);
+}
+
+.subLabels {
+  display: flex;
+  gap: var(--swatch-gap);
+}
+
+.subLabel {
+  flex: 1;
+  min-width: var(--swatch-min-w);
+  text-align: center;
+  font-size: 13px;
+  color: var(--app-text-muted);
+  line-height: 1.25;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.rows > * + * {
+  border-top: 1px solid var(--app-surface-2);
+}
+
+.addRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  margin-top: var(--space-3);
+  border: 1px dashed var(--app-border-strong);
+  background: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  color: var(--app-text-muted);
+  font-size: 14px;
+}
+
+.addRow:hover {
+  background: var(--app-surface-2);
+}
+
+.advancedPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 220px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 14px;
+}
+
+.switch {
+  width: 36px;
+  height: 20px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: var(--app-border-strong);
+  position: relative;
+  transition: background 120ms ease;
+}
+
+.switch[data-on] {
+  background: var(--app-accent);
+}
+
+.knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 120ms ease;
+}
+
+.switch[data-on] .knob {
+  transform: translateX(16px);
+}

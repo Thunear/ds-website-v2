@@ -1,0 +1,64 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.track {
+  position: relative;
+  width: 100%;
+  height: 52px;
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+/* thin rail */
+.track::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  transform: translateX(-50%);
+  background: var(--app-border);
+  border-radius: 2px;
+}
+
+/* small handle */
+.thumb {
+  position: absolute;
+  left: 50%;
+  width: 12px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--app-border-strong);
+  transform: translate(-50%, 50%);
+}
+
+.track[data-dragging] .thumb,
+.track:hover .thumb {
+  background: var(--app-text);
+}
+
+/* Modified steps stand out from the faint defaults. */
+.track[data-modified] .thumb {
+  background: var(--app-text);
+  height: 6px;
+}
+
+.track[data-modified]::before {
+  background: var(--app-border-strong);
+}
+
+.value {
+  font-size: 11px;
+  color: var(--app-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.value[data-modified] {
+  color: var(--app-text);
+  font-weight: 700;
+}

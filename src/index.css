@@ -1,0 +1,95 @@
+:root {
+  /* Neutral UI palette for the builder chrome itself (not the theme being built). */
+  --app-bg: #ebecee;
+  --app-surface: #ffffff;
+  --app-surface-2: #f6f7f8;
+  --app-border: #d9dce1;
+  --app-border-strong: #c2c7cf;
+  --app-text: #1a1d21;
+  --app-text-muted: #5c6470;
+  --app-accent: #0062ba;
+  --app-accent-hover: #004f96;
+  --app-danger: #c01b2b;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(20, 25, 30, 0.08);
+  --shadow-md: 0 6px 24px rgba(20, 25, 30, 0.14);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  --content-max: 1600px;
+  --bar-max: 1920px;
+
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--app-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Two independent light/dark axes share the same --app-* tokens:
+ *  - [data-app-theme] themes the chrome (header, theme bar, page, card frame).
+ *  - [data-mode] re-pins the tokens on the builder canvas subtree, so the panel
+ *    where scales are configured follows the mode being designed, regardless of
+ *    the surrounding chrome theme.
+ */
+[data-app-theme="dark"],
+[data-mode="dark"] {
+  --app-bg: #0b0e13;
+  --app-surface: #14181f;
+  --app-surface-2: #1c222b;
+  --app-border: #2a313b;
+  --app-border-strong: #3a424e;
+  --app-text: #e9ebee;
+  --app-text-muted: #99a1ac;
+}
+
+[data-mode="light"] {
+  --app-bg: #ebecee;
+  --app-surface: #ffffff;
+  --app-surface-2: #f6f7f8;
+  --app-border: #d9dce1;
+  --app-border-strong: #c2c7cf;
+  --app-text: #1a1d21;
+  --app-text-muted: #5c6470;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--app-bg);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}

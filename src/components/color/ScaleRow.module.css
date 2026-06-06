@@ -1,0 +1,142 @@
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--group-gap);
+  padding: var(--space-3) 0;
+}
+
+.meta {
+  width: var(--label-w);
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.metaText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.nameRow,
+.hexRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.hex {
+  font-size: 13px;
+  color: var(--app-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Row-management cluster at the far right of the row, after the swatches. */
+.rowActions {
+  flex: none;
+  width: var(--actions-w);
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+.reorder {
+  display: flex;
+  flex-direction: column;
+}
+
+.reorderBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--app-text-muted);
+  border-radius: var(--radius-sm);
+}
+
+.reorderBtn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.reorderBtn:hover:not(:disabled) {
+  color: var(--app-text);
+  background: var(--app-surface-2);
+}
+
+.reorderBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.colorChip {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 0;
+  flex: none;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--app-text-muted);
+  border-radius: var(--radius-sm);
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  flex: none;
+}
+
+.iconBtn:hover {
+  color: var(--app-text);
+  background: var(--app-surface-2);
+}
+
+.danger:hover {
+  color: var(--app-danger);
+}
+
+.iconBtn svg {
+  width: 19px;
+  height: 19px;
+}
+
+.groups {
+  display: flex;
+  gap: var(--group-gap);
+  flex: 1;
+  min-width: 0;
+}
+
+.group {
+  display: flex;
+  gap: var(--swatch-gap);
+  min-width: 0;
+}
+
+.cell {
+  flex: 1;
+  min-width: var(--swatch-min-w, 22px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
