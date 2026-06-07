@@ -1,15 +1,18 @@
 import { HexColorInput, HexColorPicker } from "react-colorful";
-import { RaindropIcon } from "@/components/ui/icons";
+import { RaindropIcon, WarningIcon } from "@/components/ui/icons";
 import { eyeDropperSupported, pickColorFromScreen } from "./useEyeDropper";
+import { BASE_CONTRAST_WARNING } from "./contrastWarning";
 import styles from "./ColorPickerPopover.module.css";
 
 interface Props {
   color: string;
   onChange: (hex: string) => void;
+  /** Warn that this base colour has too little contrast for components. */
+  lowContrast?: boolean;
 }
 
 /** Content of the "Velg farge" popover that sets a scale's source colour. */
-export function ColorPickerPopover({ color, onChange }: Props) {
+export function ColorPickerPopover({ color, onChange, lowContrast }: Props) {
   return (
     <div className={styles.root}>
       <h3>Velg farge</h3>
@@ -40,6 +43,12 @@ export function ColorPickerPopover({ color, onChange }: Props) {
           </button>
         )}
       </div>
+      {lowContrast && (
+        <div className={styles.alert} role="alert">
+          <WarningIcon aria-hidden className={styles.alertIcon} />
+          <span>{BASE_CONTRAST_WARNING}</span>
+        </div>
+      )}
     </div>
   );
 }

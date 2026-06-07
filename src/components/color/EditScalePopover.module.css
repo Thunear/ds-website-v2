@@ -1,5 +1,5 @@
 .root {
-  width: 260px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);

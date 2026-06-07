@@ -1,23 +1,28 @@
 import { useState } from "react";
-import { GRID_GROUPS } from "@/color/types";
 import { useThemeStore } from "@/theme/ThemeStore";
 import { ScaleRow } from "@/components/color/ScaleRow";
-import { LightnessCurve } from "@/components/color/LightnessCurve";
+import { ColorGridHeader } from "@/components/color/ColorGridHeader";
+import { SeveritySection } from "@/components/color/SeveritySection";
+import { LightnessRow } from "@/components/color/LightnessRow";
 import { ContextPreview } from "@/components/color/ContextPreview";
 import { ScaleDetailView } from "@/components/color/ScaleDetailView";
 import { CustomGroupSection } from "@/components/color/CustomGroupSection";
-import { Popover } from "@/components/ui/Popover";
-import { CogIcon, PlusIcon } from "@/components/ui/icons";
+import { PlusIcon } from "@/components/ui/icons";
 import styles from "./ColorsPage.module.css";
 
-const DEFAULT_NEW_COLORS = ["#0062BA", "#0D7A5F", "#5B3FA0", "#B8500F", "#9A1750"];
+const DEFAULT_NEW_COLORS = [
+  "#0062BA",
+  "#0D7A5F",
+  "#5B3FA0",
+  "#B8500F",
+  "#9A1750",
+];
 
 export function ColorsPage() {
   const { activeTheme, addScale } = useThemeStore();
   const [toggles, setToggles] = useState({
-    severity: false,
-    contrastLimits: false,
     lightness: false,
+    chroma: false,
   });
 
   const handleAdd = () => {
@@ -26,61 +31,53 @@ export function ColorsPage() {
     addScale(`farge-${n}`, color);
   };
 
+  // "neutral" is pinned to the bottom and not reorderable.
+  const movableScales = activeTheme.colors.filter((s) => s.name !== "neutral");
+  const neutralScales = activeTheme.colors.filter((s) => s.name === "neutral");
+  const orderedScales = [...movableScales, ...neutralScales];
+
   return (
     <div className={styles.page}>
       <div className={styles.head}>
         <div>
-          <h2>Sett opp fargene dine</h2>
+          <h2>Semantiske farger</h2>
           <p className={styles.lead}>
-            Velg en kilde-farge per skala. Hvert steg får samme relative
-            luminans på tvers av alle skalaene, slik at kontrasten mellom to steg
-            er lik i hele temaet.
+            Hovedfargene for grensesnittet. Velg en kilde-farge per skala —
+            hvert steg får samme relative luminans på tvers av alle skalaene,
+            slik at kontrasten mellom to steg er lik i hele temaet.
           </p>
         </div>
-        <Popover
-          placement="bottom-end"
-          trigger={
-            <button className={styles.advancedBtn}>
-              <CogIcon aria-hidden /> Avanserte innstillinger
-            </button>
-          }
-        >
-          <div className={styles.advancedPanel}>
-            <Toggle
-              label="Rediger severity farger"
-              checked={toggles.severity}
-              onChange={(v) => setToggles((t) => ({ ...t, severity: v }))}
-            />
-            <Toggle
-              label="Vis kontrastgrenser"
-              checked={toggles.contrastLimits}
-              onChange={(v) => setToggles((t) => ({ ...t, contrastLimits: v }))}
-            />
-            <Toggle
-              label="Rediger lightness"
-              checked={toggles.lightness}
-              onChange={(v) => setToggles((t) => ({ ...t, lightness: v }))}
-            />
-          </div>
-        </Popover>
+        <div className={styles.headToggles}>
+          <Toggle
+            label="Rediger lightness"
+            checked={toggles.lightness}
+            onChange={(v) => setToggles((t) => ({ ...t, lightness: v }))}
+          />
+          <Toggle
+            label="Rediger fargemetning"
+            checked={toggles.chroma}
+            onChange={(v) => setToggles((t) => ({ ...t, chroma: v }))}
+          />
+        </div>
       </div>
 
-      {toggles.lightness && <LightnessCurve />}
-
-      <div
-        className={styles.grid}
-        data-contrast-limits={toggles.contrastLimits || undefined}
-      >
-        <GridHeader />
+      <div className={styles.grid}>
+        <ColorGridHeader />
+        {toggles.lightness && <LightnessRow />}
         <div className={styles.rows}>
-          {activeTheme.colors.map((scale, i) => (
-            <ScaleRow
-              key={scale.id}
-              scale={scale}
-              index={i}
-              count={activeTheme.colors.length}
-            />
-          ))}
+          {orderedScales.map((scale) => {
+            const isNeutral = scale.name === "neutral";
+            return (
+              <ScaleRow
+                key={scale.id}
+                scale={scale}
+                index={isNeutral ? 0 : movableScales.indexOf(scale)}
+                count={movableScales.length}
+                reorderable={!isNeutral}
+                chromaEdit={toggles.chroma}
+              />
+            );
+          })}
         </div>
         <button className={styles.addRow} onClick={handleAdd}>
           <PlusIcon aria-hidden /> Legg til ny fargeskala
@@ -89,36 +86,11 @@ export function ColorsPage() {
 
       <CustomGroupSection groups={activeTheme.customGroups} />
 
+      <SeveritySection />
+
       <ContextPreview />
 
       <ScaleDetailView />
-    </div>
-  );
-}
-
-function GridHeader() {
-  return (
-    <div className={styles.header}>
-      <div className={styles.headerSpacer} />
-      <div className={styles.headerGroups}>
-        {GRID_GROUPS.map((group) => (
-          <div
-            key={group.group}
-            className={styles.headerGroup}
-            style={{ flex: group.steps.length }}
-          >
-            <div className={styles.groupTitle}>{group.title}</div>
-            <div className={styles.subLabels}>
-              {group.steps.map((s) => (
-                <span key={s.name} className={styles.subLabel}>
-                  {s.label}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className={styles.headerActionsSpacer} />
     </div>
   );
 }

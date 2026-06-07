@@ -10,20 +10,42 @@ import {
 import type { ColorMode, ColorStepName } from "@/color/types";
 import { defaultLuminanceArray } from "@/color/scale";
 import { resampleLightness, resizeChroma } from "@/color/derive";
+import * as Sz from "./sizing";
+import { removeModeColumn, renameModeColumn } from "./typography";
 import {
   createCustomColor,
   createCustomGroup,
   createScale,
   createTheme,
   defaultBuilderConfig,
+  defaultSizing,
+  defaultTypography,
+  SEVERITY_DEFAULTS,
   type BuilderConfig,
   type CustomGroup,
+  type SeverityName,
   type ThemeConfig,
+  type TypographyConfig,
 } from "./config";
 
 const STORAGE_KEY = "themebuilder-v2.config";
 /** Bump when the persisted shape or seed defaults change, to drop stale state. */
-const STORAGE_VERSION = 3;
+const STORAGE_VERSION = 8;
+
+/** Seed fields added after a theme was first saved (avoids resetting state). */
+function normalize(config: BuilderConfig): BuilderConfig {
+  return {
+    ...config,
+    themes: config.themes.map((t) => {
+      const withTypo = t.typography
+        ? t
+        : { ...t, typography: defaultTypography() };
+      return withTypo.sizing
+        ? withTypo
+        : { ...withTypo, sizing: defaultSizing() };
+    }),
+  };
+}
 
 function load(): BuilderConfig {
   try {
@@ -34,7 +56,7 @@ function load(): BuilderConfig {
         config?: BuilderConfig;
       };
       if (parsed.version === STORAGE_VERSION && parsed.config) {
-        return parsed.config;
+        return normalize(parsed.config);
       }
     }
   } catch {
@@ -85,6 +107,24 @@ interface ThemeStore {
     index: number,
     value: number,
   ) => void;
+
+  // severity colours (fixed names, recolourable)
+  setSeverityColor: (name: SeverityName, hex: string) => void;
+
+  // typography (fonts + components)
+  updateTypography: (fn: (t: TypographyConfig) => TypographyConfig) => void;
+
+  // sizing system (base/step + shared modes; modes are shared with typography)
+  setSizeBase: (base: number) => void;
+  setSizeStep: (step: number) => void;
+  setSizeModeFontSize: (name: string, fontSize: number) => void;
+  setActiveMode: (name: string) => void;
+  addSizeMode: (name: string) => void;
+  removeSizeMode: (name: string) => void;
+  renameSizeMode: (oldName: string, newName: string) => void;
+
+  // border radius (single base value; the scale is derived from it)
+  setBorderRadius: (base: number) => void;
 
   setOverride: (
     id: string,
@@ -190,8 +230,13 @@ export function ThemeStoreProvider({ children }: { children: ReactNode }) {
       moveScale: (id, direction) =>
         updateActiveTheme((t) => {
           const i = t.colors.findIndex((s) => s.id === id);
-          const j = i + direction;
-          if (i < 0 || j < 0 || j >= t.colors.length) return t;
+          if (i < 0 || t.colors[i].name === "neutral") return t;
+          // Skip past the locked "neutral" scale so it stays pinned.
+          let j = i + direction;
+          while (j >= 0 && j < t.colors.length && t.colors[j].name === "neutral") {
+            j += direction;
+          }
+          if (j < 0 || j >= t.colors.length) return t;
           const colors = t.colors.slice();
           [colors[i], colors[j]] = [colors[j], colors[i]];
           return { ...t, colors };
@@ -267,6 +312,65 @@ export function ThemeStoreProvider({ children }: { children: ReactNode }) {
             return { ...c, chroma };
           }),
         })),
+
+      setSeverityColor: (name, hex) =>
+        updateActiveTheme((t) => ({
+          ...t,
+          severity: { ...(t.severity ?? SEVERITY_DEFAULTS), [name]: hex },
+        })),
+
+      updateTypography: (fn) =>
+        updateActiveTheme((t) => ({
+          ...t,
+          typography: fn(t.typography ?? defaultTypography()),
+        })),
+
+      setSizeBase: (base) =>
+        updateActiveTheme((t) => ({ ...t, sizing: Sz.setBase(t.sizing, base) })),
+      setSizeStep: (step) =>
+        updateActiveTheme((t) => ({ ...t, sizing: Sz.setStep(t.sizing, step) })),
+      setSizeModeFontSize: (name, fontSize) =>
+        updateActiveTheme((t) => ({
+          ...t,
+          sizing: Sz.setModeFontSize(t.sizing, name, fontSize),
+        })),
+      setActiveMode: (name) =>
+        updateActiveTheme((t) => ({
+          ...t,
+          sizing: Sz.setActiveMode(t.sizing, name),
+        })),
+      addSizeMode: (name) =>
+        updateActiveTheme((t) => {
+          if (!name || t.sizing.modes.some((m) => m.name === name)) return t;
+          // Sizes are generated, so a new mode needs no typography seeding.
+          return { ...t, sizing: Sz.addMode(t.sizing, name) };
+        }),
+      removeSizeMode: (name) =>
+        updateActiveTheme((t) => {
+          if (t.sizing.modes.length <= 1) return t;
+          return {
+            ...t,
+            sizing: Sz.removeMode(t.sizing, name),
+            typography: removeModeColumn(t.typography, name),
+          };
+        }),
+      renameSizeMode: (oldName, newName) =>
+        updateActiveTheme((t) => {
+          if (
+            !newName ||
+            newName === oldName ||
+            t.sizing.modes.some((m) => m.name === newName)
+          )
+            return t;
+          return {
+            ...t,
+            sizing: Sz.renameMode(t.sizing, oldName, newName),
+            typography: renameModeColumn(t.typography, oldName, newName),
+          };
+        }),
+
+      setBorderRadius: (base) =>
+        updateActiveTheme((t) => ({ ...t, borderRadius: Math.max(0, base) })),
 
       setOverride: (id, mode, step, hex) =>
         updateActiveTheme((t) => ({

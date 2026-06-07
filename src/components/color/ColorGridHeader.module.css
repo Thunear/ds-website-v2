@@ -1,0 +1,53 @@
+.header {
+  display: flex;
+  gap: var(--group-gap);
+  align-items: flex-end;
+}
+
+.headerSpacer {
+  width: var(--label-w);
+  flex: none;
+}
+
+/* Reserves the row-actions column so swatches stay aligned under the header. */
+.headerActionsSpacer {
+  width: var(--actions-w);
+  flex: none;
+}
+
+.headerGroups {
+  display: flex;
+  gap: var(--group-gap);
+  flex: 1;
+  min-width: 0;
+}
+
+.headerGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.groupTitle {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--app-heading);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--app-border);
+}
+
+.subLabels {
+  display: flex;
+  gap: var(--swatch-gap);
+}
+
+.subLabel {
+  flex: 1;
+  min-width: var(--swatch-min-w);
+  text-align: center;
+  font-size: 13px;
+  color: var(--app-text-muted);
+  line-height: 1.25;
+}

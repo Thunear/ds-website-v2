@@ -12,9 +12,11 @@ interface Props {
   modified: boolean;
   /** Text shown under the track (e.g. the resulting chroma). */
   label: string;
+  /** Visual style: neutral (saturation) or accent + fill (lightness). */
+  variant?: "neutral" | "accent";
 }
 
-/** A slim vertical chroma slider, shown under a swatch in edit mode. */
+/** A slim vertical slider used for per-step chroma or lightness. */
 export function ChromaSlider({
   value,
   max,
@@ -22,6 +24,7 @@ export function ChromaSlider({
   onReset,
   modified,
   label,
+  variant = "neutral",
 }: Props) {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -56,6 +59,7 @@ export function ChromaSlider({
         className={styles.track}
         data-dragging={dragging || undefined}
         data-modified={modified || undefined}
+        data-variant={variant}
         title={modified ? "Dobbeltklikk for å nullstille" : undefined}
         onPointerDown={(e) => {
           e.preventDefault();
@@ -64,10 +68,14 @@ export function ChromaSlider({
         }}
         onDoubleClick={onReset}
       >
+        {variant === "accent" && (
+          <div className={styles.fill} style={{ height: `${pct}%` }} />
+        )}
         <div className={styles.thumb} style={{ bottom: `${pct}%` }} />
       </div>
       <span
         className={styles.value}
+        data-variant={variant}
         data-modified={modified || undefined}
       >
         {label}

@@ -1,6 +1,5 @@
 .swatch {
-  flex: 1;
-  min-width: var(--swatch-min-w, 22px);
+  width: 100%;
   height: var(--swatch-h, 42px);
   border: 1px solid var(--app-border);
   border-radius: var(--radius-sm);

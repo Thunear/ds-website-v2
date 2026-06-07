@@ -176,6 +176,7 @@ function GroupBlock({ group }: { group: CustomGroup }) {
                   <ChromaSlider
                     value={lum}
                     max={1}
+                    variant="accent"
                     modified={false}
                     label={lum.toFixed(2)}
                     onChange={(v) => setGroupLightness(group.id, i, round3(v))}

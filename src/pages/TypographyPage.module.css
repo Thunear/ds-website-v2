@@ -1,0 +1,514 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.head h2 {
+  font-size: 20px;
+}
+
+.lead {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--app-text-muted);
+  max-width: 620px;
+  margin-top: var(--space-2);
+}
+
+.modeSwitch {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+  flex: none;
+}
+
+.modeSwitchLabel {
+  font-size: 13px;
+  color: var(--app-text-muted);
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.seg,
+.segActive {
+  border: none;
+  background: var(--app-surface);
+  padding: var(--space-2) var(--space-4);
+  font-size: 14px;
+  color: var(--app-text-muted);
+  text-transform: capitalize;
+}
+
+.segActive {
+  background: var(--app-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.section {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--app-border);
+}
+
+.section h3 {
+  font-size: 16px;
+  color: var(--app-heading);
+}
+
+.componentsHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--app-text-muted);
+  margin-top: 2px;
+}
+
+/* chips */
+.chipGroups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.chipGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.chipTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--app-heading);
+}
+
+.chipDesc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--app-text-muted);
+  max-width: 640px;
+  margin-bottom: var(--space-1);
+}
+
+.chips {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 34px;
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-2);
+  background: var(--app-surface);
+}
+
+.chipInput {
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--app-text);
+  padding: 2px;
+  min-width: 30px;
+}
+
+.chipRemove {
+  border: none;
+  background: none;
+  color: var(--app-text-muted);
+  font-size: 15px;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.chipRemove:hover {
+  color: var(--app-danger);
+}
+
+.chipAdd {
+  border: 1px dashed var(--app-border-strong);
+  border-radius: var(--radius-sm);
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  height: 34px;
+  padding: 0 var(--space-2);
+  width: 70px;
+  color: var(--app-text);
+}
+
+/* fonts */
+.fonts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+.fontCard {
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-lg);
+  background: var(--app-surface-2);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.fontHead {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--app-text-muted);
+}
+
+.field input,
+.field select {
+  font: inherit;
+  font-size: 14px;
+  color: var(--app-text);
+  padding: var(--space-2);
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--app-surface);
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: none;
+  color: var(--app-text-muted);
+  border-radius: var(--radius-sm);
+}
+
+.iconBtn:hover {
+  color: var(--app-text);
+  background: var(--app-surface);
+}
+
+.iconBtn svg {
+  width: 19px;
+  height: 19px;
+}
+
+.danger:hover {
+  color: var(--app-danger);
+}
+
+.weights {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.weightsHead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.weightHint {
+  font-size: 12px;
+  color: var(--app-text-muted);
+}
+
+.weightsRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.subLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-text-muted);
+}
+
+.weight {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 34px;
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0 4px;
+  background: var(--app-surface);
+}
+
+.weightName {
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  width: 72px;
+  color: var(--app-text);
+}
+
+.weightVal {
+  border: none;
+  border-left: 1px solid var(--app-border);
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  width: 90px;
+  padding-left: 6px;
+  color: var(--app-text-muted);
+}
+
+.smallAdd {
+  border: 1px dashed var(--app-border-strong);
+  border-radius: var(--radius-sm);
+  background: none;
+  font-size: 14px;
+  height: 34px;
+  padding: 0 var(--space-3);
+  color: var(--app-text-muted);
+}
+
+/* modular scale controls */
+.scaleRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.ratioInput {
+  width: 96px;
+}
+
+.sizeTable {
+  /* Separated cells so the px fields read as individual inputs, and the table
+     takes content width instead of stretching to the flex column. */
+  border-collapse: separate;
+  border-spacing: var(--space-2) var(--space-1);
+  font-size: 13px;
+  align-self: flex-start;
+}
+
+.colSub {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--app-text-muted);
+}
+
+.anchorTag {
+  margin-left: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--app-accent);
+  border: 1px solid color-mix(in srgb, var(--app-accent) 35%, transparent);
+  border-radius: var(--radius-sm);
+  padding: 1px 5px;
+}
+
+/* a generated/override cell: input shows the generated value as placeholder */
+.cell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.cell input {
+  width: 96px;
+  box-sizing: border-box;
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-sm);
+  background: var(--app-surface-2);
+  color: var(--app-text);
+  font: inherit;
+  font-size: 14px;
+  padding: var(--space-2);
+  text-align: center;
+}
+
+.cell input::placeholder {
+  color: var(--app-text-muted);
+  opacity: 0.7;
+}
+
+.cell input:focus {
+  outline: none;
+  border-color: var(--app-accent);
+  background: var(--app-surface);
+}
+
+/* pinned (overridden) cells stand out from the generated ones */
+.cellPinned input {
+  border-color: var(--app-accent);
+  background: var(--app-surface);
+  font-weight: 600;
+}
+
+.cellReset {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  color: var(--app-text-muted);
+  font-size: 14px;
+  line-height: 1;
+  padding: 2px;
+}
+
+.cellReset:hover {
+  color: var(--app-danger);
+}
+
+.sizeTable thead th {
+  text-transform: capitalize;
+  color: var(--app-text-muted);
+  font-weight: 600;
+  text-align: center;
+  padding-bottom: 2px;
+}
+
+.cornerCell {
+  font-weight: 400;
+  text-align: left;
+}
+
+.stepCell {
+  text-align: left;
+  color: var(--app-text);
+  font-weight: 600;
+  padding-right: var(--space-2);
+}
+
+/* components */
+.components {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.componentRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--app-surface-2);
+  flex-wrap: wrap;
+}
+
+/* Left: the rendered type sample (a classic type scale), fixed-width so the
+   controls sit right beside it instead of being pushed to the far edge. */
+.previewCol {
+  flex: 0 1 460px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.compNameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.compName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--app-heading);
+}
+
+.lockedTag {
+  font-size: 11px;
+  color: var(--app-text-muted);
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+}
+
+.previewText {
+  color: var(--app-text);
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.previewMeta {
+  font-size: 12px;
+  color: var(--app-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Controls, sitting just to the right of the type sample. */
+.compControls {
+  flex: none;
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.addRow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  margin-top: var(--space-3);
+  border: 1px dashed var(--app-border-strong);
+  background: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  color: var(--app-text-muted);
+  font-size: 14px;
+}
+
+.addRow:hover {
+  background: var(--app-surface-2);
+}
+
+.addRow svg {
+  width: 18px;
+  height: 18px;
+}

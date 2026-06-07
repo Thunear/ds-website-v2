@@ -1,0 +1,457 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5);
+}
+
+.head {
+  flex: 1 1 360px;
+  min-width: 0;
+}
+
+.head h2 {
+  font-size: 20px;
+}
+
+@media (max-width: 860px) {
+  .topRow {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+}
+
+.lead {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--app-text-muted);
+  max-width: 640px;
+  margin-top: var(--space-2);
+}
+
+.section {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--app-border);
+}
+
+.section h3 {
+  font-size: 16px;
+  color: var(--app-heading);
+}
+
+.sub {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--app-text-muted);
+  margin-top: 2px;
+  max-width: 640px;
+}
+
+/* ---------- preset picker ---------- */
+.presetRow {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-4);
+}
+
+.preset,
+.presetActive {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: 92px;
+  padding: var(--space-3) var(--space-2);
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--app-surface);
+  color: var(--app-text);
+}
+
+.presetActive {
+  border-color: var(--app-accent);
+  box-shadow: 0 0 0 1px var(--app-accent) inset;
+}
+
+.presetSwatch {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--app-accent);
+  background: color-mix(in srgb, var(--app-accent) 12%, transparent);
+}
+
+.presetName {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.presetVal {
+  font-size: 12px;
+  color: var(--app-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.baseField {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--app-text-muted);
+  margin-left: var(--space-2);
+}
+
+.baseField input {
+  width: 84px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--app-text);
+  padding: var(--space-2);
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--app-surface);
+  text-align: center;
+}
+
+.baseField input:focus {
+  outline: none;
+  border-color: var(--app-accent);
+}
+
+/* ---------- info card (top-right) ---------- */
+.infoCard {
+  flex: 0 1 440px;
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid color-mix(in srgb, #7b2fb0 30%, var(--app-border));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, #7b2fb0 8%, var(--app-surface));
+}
+
+.infoLogo {
+  width: 22px;
+  height: auto;
+  flex: none;
+  margin-top: 2px;
+}
+
+.infoCard strong {
+  font-size: 14px;
+  color: var(--app-heading);
+}
+
+.infoCard p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--app-text-muted);
+  margin-top: 4px;
+  max-width: 720px;
+}
+
+/* ---------- variable list ---------- */
+.varList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+@media (max-width: 760px) {
+  .varList {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.varCard {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-md);
+  background: var(--app-surface);
+}
+
+.varInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.varName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--app-heading);
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+
+.varChips {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-size: 12px;
+  color: var(--app-text-muted);
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  background: var(--app-surface-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.chipCap {
+  border-color: var(--app-warning-border);
+  background: var(--app-warning-surface);
+  color: var(--app-warning);
+}
+
+.varDesc {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--app-text-muted);
+}
+
+.varDemo {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 60px;
+}
+
+.varPx {
+  font-size: 11px;
+  color: var(--app-text-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.demoBox {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--app-accent);
+  background: color-mix(in srgb, var(--app-accent) 10%, transparent);
+}
+
+/* ---------- component gallery (most visual feedback) ---------- */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.tile {
+  flex: 1 1 150px;
+  min-width: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-4) var(--space-3) var(--space-3);
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-md);
+  background: var(--app-surface);
+}
+
+.tileStage {
+  height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tileLabel {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--app-heading);
+  text-align: center;
+}
+
+.tileSub {
+  font-size: 11px;
+  color: var(--app-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.galBtn {
+  border: none;
+  background: var(--app-accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 22px;
+}
+
+.galInput {
+  border: 1px solid var(--app-border-strong);
+  background: var(--app-surface);
+  color: var(--app-text-muted);
+  font-size: 13px;
+  padding: 10px 14px;
+  min-width: 104px;
+}
+
+.galCheck {
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--app-accent);
+  background: color-mix(in srgb, var(--app-accent) 14%, transparent);
+}
+
+.galAvatar {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--app-accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.galBadge {
+  background: var(--app-accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 13px;
+}
+
+/* ---------- context preview ---------- */
+.previewGrid {
+  display: flex;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  margin-top: var(--space-5);
+}
+
+.previewCol {
+  flex: 1 1 360px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.previewTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* nested hierarchy */
+.panel {
+  border: 1px solid var(--app-border-strong);
+  background: var(--app-surface-2);
+  padding: var(--space-5);
+}
+
+.card {
+  border: 1px solid var(--app-border-strong);
+  background: var(--app-surface);
+  padding: var(--space-5);
+  margin-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.cardRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 13px;
+  padding: 6px 14px;
+  margin-top: var(--space-1);
+  background: color-mix(in srgb, var(--app-accent) 14%, transparent);
+  color: var(--app-accent);
+  border: 1px solid color-mix(in srgb, var(--app-accent) 35%, transparent);
+}
+
+.tagLabel {
+  font-size: 12px;
+  color: var(--app-text-muted);
+}
+
+.annotate {
+  display: block;
+  font-size: 11px;
+  color: var(--app-text-muted);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 4px;
+}
+
+/* login-form replica */
+.form {
+  border: 1px solid var(--app-border-strong);
+  background: var(--app-surface);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 320px;
+}
+
+.formTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--app-heading);
+  margin-bottom: var(--space-1);
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formField span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.input {
+  border: 1px solid var(--app-border-strong);
+  background: var(--app-surface);
+  color: var(--app-text-muted);
+  font-size: 14px;
+  padding: 10px var(--space-3);
+}
+
+.submit {
+  border: none;
+  background: var(--app-accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px;
+  margin-top: var(--space-2);
+}
+
+.link {
+  font-size: 13px;
+  color: var(--app-accent);
+  text-decoration: underline;
+}

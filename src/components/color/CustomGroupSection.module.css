@@ -1,5 +1,6 @@
 .section {
-  padding-top: var(--space-4);
+  margin-top: var(--space-2);
+  padding-top: var(--space-6);
   border-top: 1px solid var(--app-border);
 }
 
@@ -9,6 +10,7 @@
 
 .lead {
   font-size: 14px;
+  line-height: 1.5;
   color: var(--app-text-muted);
   max-width: 720px;
   margin-top: var(--space-2);
@@ -32,6 +34,7 @@
 .groupName {
   font-size: 16px;
   font-weight: 700;
+  color: var(--app-heading);
 }
 
 .stepper {
@@ -184,6 +187,7 @@
 .name {
   font-size: 14px;
   font-weight: 600;
+  color: var(--app-heading);
 }
 
 .hex {

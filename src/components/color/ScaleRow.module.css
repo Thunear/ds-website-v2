@@ -31,6 +31,7 @@
 .name {
   font-size: 15px;
   font-weight: 600;
+  color: var(--app-heading);
 }
 
 .hex {
@@ -113,6 +114,39 @@
 
 .danger:hover {
   color: var(--app-danger);
+}
+
+.warnBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--app-warning);
+  padding: 0;
+  flex: none;
+}
+
+.warnBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.warnPopover {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.warnPopover strong {
+  font-size: 14px;
+}
+
+.warnPopover p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--app-text-muted);
 }
 
 .iconBtn svg {

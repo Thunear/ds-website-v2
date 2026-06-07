@@ -34,7 +34,7 @@
 }
 
 .tabActive {
-  color: var(--app-text);
+  color: var(--app-heading);
   border-bottom-color: var(--app-accent);
   font-weight: 600;
 }

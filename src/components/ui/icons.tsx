@@ -7,6 +7,8 @@ export {
   PencilIcon,
   TrashIcon,
   CheckmarkIcon,
+  ExclamationmarkTriangleFillIcon as WarningIcon,
+  PadlockLockedIcon as LockIcon,
   ChevronUpIcon,
   ChevronDownIcon,
   PaletteIcon,

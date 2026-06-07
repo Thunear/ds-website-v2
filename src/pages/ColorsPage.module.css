@@ -26,9 +26,17 @@
 
 .lead {
   font-size: 14px;
+  line-height: 1.5;
   color: var(--app-text-muted);
   max-width: 640px;
   margin-top: var(--space-2);
+}
+
+.headToggles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  white-space: nowrap;
 }
 
 .advancedBtn {
