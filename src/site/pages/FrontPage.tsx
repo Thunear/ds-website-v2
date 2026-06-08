@@ -42,19 +42,21 @@ export function FrontPage() {
       <section className={styles.hero}>
         <Confetti />
         <div className={styles.heroInner}>
-          <p className={styles.eyebrow}>Designsystemet</p>
+          <p className={styles.eyebrow}>Bygget for fleksibilitet</p>
           <h1 className={styles.title}>
-            Designsystemet hjelper deg å lage gode digitale tjenester
+            Fundamentet for ditt eget designsystem
           </h1>
           <p className={styles.lead}>
-            Velg et tema og se hvordan hele nettstedet – og komponentene under – farges
-            av det. Fortsett i temabyggeren for å lage ditt eget.
+            Et sett gjennomtenkte komponenter og mønstre du kan tilpasse, utvide og
+            bygge videre på. Bruk mindre tid på grunnmuren og mer på det som gjør dere
+            unike. Bytt mellom temaene under og se hvordan det samme systemet kan se
+            helt ulikt ut.
           </p>
 
           <div className={styles.cta}>
             <ThemeSwitcher />
             <Link to={`/temabygger?theme=${themeId}`} className={styles.ctaPrimary}>
-              Fortsett i temabyggeren <ArrowRightIcon aria-hidden />
+              Bygg ditt eget <ArrowRightIcon aria-hidden />
             </Link>
           </div>
         </div>

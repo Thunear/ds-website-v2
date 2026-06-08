@@ -8,11 +8,13 @@
 .deco {
   position: absolute;
   inset: 0;
+  /* Tinted with the active theme's accent so the bar follows the chosen colour. */
   background:
-    radial-gradient(420px 220px at 12% -40%, #cfe0fb 0%, transparent 70%),
-    radial-gradient(420px 220px at 88% -30%, #ffe7c2 0%, transparent 70%),
-    radial-gradient(420px 240px at 96% 120%, #ffd6d6 0%, transparent 70%);
+    radial-gradient(460px 240px at 10% -40%, var(--bar-tint-2) 0%, transparent 70%),
+    radial-gradient(520px 240px at 92% -30%, var(--bar-tint) 0%, transparent 72%),
+    radial-gradient(420px 240px at 98% 130%, var(--bar-tint) 0%, transparent 70%);
   pointer-events: none;
+  transition: background 0.4s ease;
 }
 
 .inner {
@@ -29,7 +31,7 @@
 .title {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 6px;
 }
 
 .title h1 {
@@ -38,14 +40,91 @@
   color: var(--app-heading);
 }
 
-.titleInput {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--app-heading);
-  text-align: center;
+/* Edit-theme popover content -------------------------------------------- */
+.editPop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 220px;
+}
+
+.editLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-text-muted);
+}
+
+.editInput {
+  font: inherit;
+  font-size: 15px;
+  color: var(--app-text);
+  background: var(--app-surface-2);
   border: 1px solid var(--app-border-strong);
   border-radius: var(--radius-sm);
-  padding: 2px var(--space-2);
+  padding: var(--space-2) var(--space-3);
+}
+
+.editInput:focus {
+  outline: none;
+  border-color: var(--app-accent);
+  box-shadow: 0 0 0 3px rgba(0, 98, 186, 0.15);
+}
+
+.deleteLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  align-self: flex-start;
+  margin-top: var(--space-2);
+  border: none;
+  background: none;
+  color: var(--app-danger);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0;
+}
+
+.deleteLink svg {
+  width: 16px;
+  height: 16px;
+}
+
+.editTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--app-heading);
+}
+
+.editHint {
+  font-size: 14px;
+  color: var(--app-text-muted);
+}
+
+.editActions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.secondary,
+.danger {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--app-border-strong);
+}
+
+.secondary {
+  background: var(--app-surface);
+  color: var(--app-text);
+}
+
+.danger {
+  background: var(--app-danger);
+  color: #fff;
+  border-color: var(--app-danger);
 }
 
 .editBtn {
@@ -53,13 +132,14 @@
   align-items: center;
   border: none;
   background: none;
+  padding: 0;
   font-size: 16px;
   opacity: 0.7;
 }
 
 .editBtn svg {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
 }
 
 .addBtn svg {
@@ -82,6 +162,7 @@
   padding: var(--space-2) var(--space-4);
   font-size: 14px;
   font-weight: 600;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .themePill {
@@ -90,8 +171,8 @@
 }
 
 .themePillActive {
-  background: var(--app-accent);
-  color: #fff;
+  background: var(--bar-accent);
+  color: var(--bar-on-accent);
 }
 
 .addBtn {
