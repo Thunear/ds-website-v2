@@ -1,0 +1,17 @@
+.placeholder {
+  max-width: 720px;
+  margin: 0 auto;
+  /* Clear the overlaid storefront header. */
+  padding: calc(var(--header-h) + var(--space-6)) var(--space-5) var(--space-6);
+}
+
+.placeholder h1 {
+  color: var(--app-heading);
+  font-size: 32px;
+  margin-bottom: var(--space-3);
+}
+
+.placeholder p {
+  color: var(--app-text-muted);
+  font-size: 18px;
+}

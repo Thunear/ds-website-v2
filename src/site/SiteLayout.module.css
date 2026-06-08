@@ -1,0 +1,16 @@
+.site {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--app-bg);
+  color: var(--app-text);
+  /* Typography is part of the theme too. */
+  font-family: var(--fb-font, inherit);
+}
+
+/* Full-bleed: pages/sections own their max-width and horizontal padding, so
+   coloured bands (hero, news) can span the full viewport width. */
+.content {
+  flex: 1 0 auto;
+}

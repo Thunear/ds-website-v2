@@ -36,6 +36,7 @@
 
   --content-max: 1600px;
   --bar-max: 1920px;
+  --header-h: 85px;
 
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color: var(--app-text);

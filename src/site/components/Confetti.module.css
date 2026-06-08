@@ -1,0 +1,104 @@
+.field {
+  position: absolute;
+  /* Keep shapes clear of the overlaid header so they don't crowd the logo/nav. */
+  inset: var(--header-h) 0 0 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.shape {
+  position: absolute;
+  transition: background 0.4s ease, border-bottom-color 0.4s ease;
+}
+
+/* Squares (rotated) */
+.square1,
+.square2,
+.square3 {
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  transform: rotate(20deg);
+}
+
+.square1 {
+  top: 14%;
+  left: 8%;
+  background: var(--fb-shape-3);
+}
+
+.square2 {
+  top: 62%;
+  left: 5%;
+  background: var(--fb-shape-1);
+  transform: rotate(-15deg);
+}
+
+.square3 {
+  top: 24%;
+  right: 10%;
+  background: var(--fb-shape-2);
+  transform: rotate(35deg);
+}
+
+/* Circles */
+.circle1,
+.circle2,
+.circle3 {
+  border-radius: 50%;
+}
+
+.circle1 {
+  top: 30%;
+  left: 16%;
+  width: 16px;
+  height: 16px;
+  background: var(--fb-shape-2);
+}
+
+.circle2 {
+  top: 12%;
+  right: 22%;
+  width: 22px;
+  height: 22px;
+  background: var(--fb-shape-4);
+}
+
+.circle3 {
+  top: 70%;
+  right: 8%;
+  width: 28px;
+  height: 28px;
+  background: var(--fb-shape-1);
+}
+
+/* Triangles (via borders) */
+.triangle1,
+.triangle2 {
+  width: 0;
+  height: 0;
+  background: transparent !important;
+  border-left: 13px solid transparent;
+  border-right: 13px solid transparent;
+}
+
+.triangle1 {
+  top: 50%;
+  right: 16%;
+  border-bottom: 22px solid var(--fb-shape-3);
+  transform: rotate(15deg);
+}
+
+.triangle2 {
+  top: 78%;
+  left: 18%;
+  border-bottom: 20px solid var(--fb-shape-4);
+  transform: rotate(-25deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shape {
+    transition: none;
+  }
+}
