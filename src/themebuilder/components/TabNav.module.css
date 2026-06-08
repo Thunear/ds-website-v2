@@ -35,7 +35,8 @@
 
 .tabActive {
   color: var(--app-heading);
-  border-bottom-color: var(--app-accent);
+  /* Inherit the active theme's accent (set on the builder root). */
+  border-bottom-color: var(--bar-accent, var(--app-accent));
   font-weight: 600;
 }
 
@@ -52,9 +53,9 @@
 }
 
 .tabActive .num {
-  background: var(--app-accent);
-  border-color: var(--app-accent);
-  color: #fff;
+  background: var(--bar-accent, var(--app-accent));
+  border-color: var(--bar-accent, var(--app-accent));
+  color: var(--bar-on-accent, #fff);
 }
 
 .modeToggle {

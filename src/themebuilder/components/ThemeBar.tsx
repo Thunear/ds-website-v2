@@ -1,20 +1,8 @@
-import { useState, type CSSProperties } from "react";
-import chroma from "chroma-js";
+import { useState } from "react";
 import { useThemeStore } from "@/themebuilder/theme/ThemeStore";
 import { PencilIcon, PlusIcon, TrashIcon } from "@/shared/ui/icons";
 import { Popover } from "@/shared/ui/Popover";
 import styles from "./ThemeBar.module.css";
-
-/** The active theme's source accent colour drives the bar's tint + active pill. */
-function barVars(accentHex: string): CSSProperties {
-  const accent = chroma(accentHex);
-  return {
-    "--bar-accent": accent.hex(),
-    "--bar-on-accent": chroma.contrast(accentHex, "white") >= 4.5 ? "#fff" : "#1a1d21",
-    "--bar-tint": chroma.mix(accent, "white", 0.82, "rgb").hex(),
-    "--bar-tint-2": chroma.mix(accent, "white", 0.6, "rgb").hex(),
-  } as CSSProperties;
-}
 
 export function ThemeBar() {
   const { config, activeTheme, selectTheme, addTheme, renameTheme, removeTheme } =
@@ -24,12 +12,10 @@ export function ThemeBar() {
   const [confirming, setConfirming] = useState(false);
 
   const canDelete = config.themes.length > 1;
-  const accentHex =
-    activeTheme.colors.find((s) => s.name === "accent")?.hex ?? "#0062BA";
 
+  // The --bar-* tint vars are provided by BuilderLayout on the root.
   return (
-    <section className={styles.bar} style={barVars(accentHex)}>
-      <div className={styles.deco} aria-hidden />
+    <section className={styles.bar}>
       <div className={styles.inner}>
         <div className={styles.title}>
           <h1>{activeTheme.name}</h1>

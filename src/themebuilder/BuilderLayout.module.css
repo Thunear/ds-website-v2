@@ -2,7 +2,11 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--app-bg);
+  /* Soft wash of the active theme's tint near the top, fading into the neutral
+     page so the builder isn't a flat white/grey expanse. */
+  background:
+    linear-gradient(180deg, var(--bar-tint, transparent) 0, transparent 520px),
+    var(--app-bg);
   color: var(--app-text);
   transition: background 160ms ease, color 160ms ease;
 }
