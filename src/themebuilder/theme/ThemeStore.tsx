@@ -30,7 +30,7 @@ import {
 
 const STORAGE_KEY = "themebuilder-v2.config";
 /** Bump when the persisted shape or seed defaults change, to drop stale state. */
-const STORAGE_VERSION = 9;
+const STORAGE_VERSION = 10;
 
 /** Seed fields added after a theme was first saved (avoids resetting state). */
 function normalize(config: BuilderConfig): BuilderConfig {
@@ -200,6 +200,19 @@ export function ThemeStoreProvider({ children }: { children: ReactNode }) {
         }),
       seedFromPalette: (name, palette) =>
         setConfig((c) => {
+          // Idempotent: if a theme already seeded from this palette exists,
+          // just select it instead of adding another duplicate. (The front page
+          // re-runs this on every "Fortsett i temabyggeren" navigation.)
+          const accentOf = (t: ThemeConfig) =>
+            t.colors.find((s) => s.name === "accent")?.hex.toLowerCase();
+          const existing = c.themes.find(
+            (t) => t.name === name && accentOf(t) === palette.accent.toLowerCase(),
+          );
+          if (existing) {
+            return existing.id === c.activeThemeId
+              ? c
+              : { ...c, activeThemeId: existing.id };
+          }
           const t = createTheme(name);
           // Map the seed colours onto the standard semantic scales by name.
           const byName: Record<string, string> = {
