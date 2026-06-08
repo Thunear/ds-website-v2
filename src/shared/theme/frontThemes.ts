@@ -88,14 +88,27 @@ function onColor(bg: string): string {
 /**
  * The CSS custom properties for a theme. Spread onto a wrapper element; every
  * themed surface on the front page reads these via `var(--fb-*)` / `var(--logo-*)`.
+ *
+ * `dark` flips the surfaces/text the brand sits on: tints mix toward a dark
+ * surface and accent text is lightened so it stays readable on a dark page.
  */
-export function frontThemeVars(t: FrontTheme): Record<string, string> {
+export function frontThemeVars(t: FrontTheme, dark = false): Record<string, string> {
   const accent = chroma(t.accent);
+  // Accent used as text/links on the page background (must read on light + dark).
+  const accentText = dark ? chroma.mix(accent, "white", 0.5, "rgb") : accent;
+  // Soft "tint" surface (badges, secondary buttons, hero band).
+  const tint = dark
+    ? chroma.mix(accent, "#161b24", 0.84, "rgb")
+    : chroma.mix(accent, "white", 0.86, "rgb");
+  // Text/icons sitting on that tint surface.
+  const onTint = dark ? accentText : accent.darken(0.7);
   return {
     "--fb-accent": accent.hex(),
     "--fb-accent-hover": accent.darken(0.7).hex(),
-    "--fb-accent-tint": chroma.mix(accent, "white", 0.86, "rgb").hex(),
+    "--fb-accent-tint": tint.hex(),
+    "--fb-accent-text": accentText.hex(),
     "--fb-on-accent": onColor(t.accent),
+    "--fb-on-tint": onTint.hex(),
     "--fb-shape-1": t.brand[0],
     "--fb-shape-2": t.brand[1],
     "--fb-shape-3": t.brand[2],

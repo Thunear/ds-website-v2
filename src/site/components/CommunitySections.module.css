@@ -69,12 +69,12 @@
   padding: 2px var(--space-2);
   border-radius: var(--radius-pill);
   background: var(--fb-accent-tint);
-  color: var(--fb-accent-hover);
+  color: var(--fb-on-tint);
   transition: background 0.4s ease, color 0.4s ease;
 }
 
 .newsTitle {
-  color: var(--fb-accent);
+  color: var(--fb-accent-text);
   font-size: 16px;
   line-height: 1.3;
   transition: color 0.4s ease;
@@ -163,7 +163,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  color: var(--fb-accent);
+  color: var(--fb-accent-text);
   font-weight: 600;
   font-size: 14px;
   text-decoration: none;

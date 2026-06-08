@@ -33,7 +33,7 @@
 }
 
 .link {
-  color: var(--fb-accent);
+  color: var(--fb-accent-text);
   font-weight: 600;
   text-decoration: none;
   transition: color 0.4s ease;

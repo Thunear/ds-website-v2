@@ -15,13 +15,19 @@ import styles from "./BuilderLayout.module.css";
  * active theme pill, and a soft wash behind the builder card (set as vars on
  * the root so descendants share them).
  */
-function chromeVars(accentHex: string): CSSProperties {
+function chromeVars(accentHex: string, dark: boolean): CSSProperties {
   const accent = chroma(accentHex);
+  // The backdrop wash mixes toward the dark page in dark mode (a faint accent
+  // glow) instead of toward white, which would read as a stray light band.
+  const tint = (amount: number) =>
+    dark
+      ? chroma.mix(accent, "#0b0e13", amount, "rgb").hex()
+      : chroma.mix(accent, "white", amount, "rgb").hex();
   return {
     "--bar-accent": accent.hex(),
     "--bar-on-accent": chroma.contrast(accentHex, "white") >= 4.5 ? "#fff" : "#1a1d21",
-    "--bar-tint": chroma.mix(accent, "white", 0.82, "rgb").hex(),
-    "--bar-tint-2": chroma.mix(accent, "white", 0.6, "rgb").hex(),
+    "--bar-tint": tint(dark ? 0.86 : 0.82),
+    "--bar-tint-2": tint(dark ? 0.74 : 0.6),
   } as CSSProperties;
 }
 
@@ -52,7 +58,11 @@ export function BuilderLayout() {
 
   return (
     // appTheme themes the chrome; the canvas (tabBody) re-pins tokens to `mode`.
-    <div className={styles.app} data-app-theme={appTheme} style={chromeVars(accentHex)}>
+    <div
+      className={styles.app}
+      data-app-theme={appTheme}
+      style={chromeVars(accentHex, appTheme === "dark")}
+    >
       <SiteHeader />
       <ThemeBar />
       <main className={styles.content}>

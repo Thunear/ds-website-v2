@@ -87,13 +87,13 @@
 .btnSecondary,
 .btnSoftWide {
   background: var(--fb-accent-tint);
-  color: var(--fb-accent-hover);
+  color: var(--fb-on-tint);
 }
 
 .btnOutline {
   background: transparent;
-  color: var(--fb-accent);
-  border-color: var(--fb-accent);
+  color: var(--fb-accent-text);
+  border-color: var(--fb-accent-text);
 }
 
 .btnPrimaryWide,
@@ -124,7 +124,7 @@
 
 .badgeSoft {
   background: var(--fb-accent-tint);
-  color: var(--fb-accent-hover);
+  color: var(--fb-on-tint);
 }
 
 /* Form ------------------------------------------------------------------- */

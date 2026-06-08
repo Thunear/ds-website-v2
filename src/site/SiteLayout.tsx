@@ -17,7 +17,7 @@ export function SiteLayout() {
       data-app-theme={appTheme}
       // The brand theme is exposed as CSS vars on the whole shell so the header
       // logo re-brands together with the page content.
-      style={frontThemeVars(theme) as CSSProperties}
+      style={frontThemeVars(theme, appTheme === "dark") as CSSProperties}
     >
       <SiteHeader transparent />
       <main className={styles.content}>

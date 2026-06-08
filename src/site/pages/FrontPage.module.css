@@ -31,7 +31,7 @@
 }
 
 .eyebrow {
-  color: var(--fb-accent);
+  color: var(--fb-accent-text);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -145,7 +145,7 @@
   height: 44px;
   border-radius: var(--radius-md);
   background: var(--fb-accent-tint);
-  color: var(--fb-accent);
+  color: var(--fb-on-tint);
   margin-bottom: var(--space-4);
   transition: background 0.4s ease, color 0.4s ease;
 }
@@ -156,7 +156,7 @@
 }
 
 .cardTitle {
-  color: var(--fb-accent);
+  color: var(--fb-accent-text);
   font-size: 20px;
   margin-bottom: var(--space-2);
   transition: color 0.4s ease;
