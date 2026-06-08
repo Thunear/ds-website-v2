@@ -77,7 +77,7 @@ export function SizesPage() {
           Hvert modus er én font-size. Lag gjerne et eget, f.eks. «kompakt», med
           lavere font-size for tettere visning.
         </p>
-        <div className={styles.modeList}>
+        <div className={styles.modeGrid}>
           {modes.map((m) => (
             <div
               key={m.name}
@@ -85,48 +85,65 @@ export function SizesPage() {
                 m.name === activeMode ? styles.modeActive : ""
               }`}
             >
-              <ModeName
-                value={m.name}
-                onCommit={(v) => renameSizeMode(m.name, v)}
-              />
-              <label className={styles.modeFont}>
+              <div className={styles.modeCardHead}>
+                <label className={styles.fieldLabel}>
+                  <span>Navn</span>
+                  <ModeName
+                    value={m.name}
+                    onCommit={(v) => renameSizeMode(m.name, v)}
+                  />
+                </label>
+                {modes.length > 1 && (
+                  <button
+                    className={`${styles.iconBtn} ${styles.danger}`}
+                    aria-label={`Slett ${m.name}`}
+                    onClick={() => removeSizeMode(m.name)}
+                  >
+                    <TrashIcon />
+                  </button>
+                )}
+              </div>
+
+              <label className={styles.fieldLabel}>
                 <span>font-size</span>
-                <input
-                  type="number"
-                  min={1}
-                  value={m.fontSize}
-                  onChange={(e) =>
-                    setSizeModeFontSize(m.name, Number(e.target.value))
-                  }
-                />
-                <span className={styles.unitTag}>px</span>
+                <span className={styles.inputWrap}>
+                  <input
+                    type="number"
+                    min={1}
+                    value={m.fontSize}
+                    onChange={(e) =>
+                      setSizeModeFontSize(m.name, Number(e.target.value))
+                    }
+                  />
+                  <span className={styles.unitTag}>px</span>
+                </span>
               </label>
-              <span className={styles.unitInfo}>
-                unit {fmt(sizeValue(base, step, m.fontSize, 1))}px
-              </span>
-              {m.name === activeMode ? (
-                <span className={styles.activeBadge}>aktiv</span>
-              ) : (
-                <button
-                  className={styles.linkBtn}
-                  onClick={() => setActiveMode(m.name)}
-                >
-                  Forhåndsvis
-                </button>
-              )}
-              {modes.length > 1 && (
-                <button
-                  className={`${styles.iconBtn} ${styles.danger}`}
-                  aria-label={`Slett ${m.name}`}
-                  onClick={() => removeSizeMode(m.name)}
-                >
-                  <TrashIcon />
-                </button>
-              )}
+
+              <div className={styles.modeCardFoot}>
+                <span className={styles.unitInfo}>
+                  unit {fmt(sizeValue(base, step, m.fontSize, 1))}px
+                </span>
+                {m.name === activeMode ? (
+                  <span className={styles.activeBadge}>Aktiv</span>
+                ) : (
+                  <button
+                    className={styles.previewBtn}
+                    onClick={() => setActiveMode(m.name)}
+                  >
+                    Forhåndsvis
+                  </button>
+                )}
+              </div>
             </div>
           ))}
+          <button
+            className={styles.addCard}
+            onClick={() => addSizeMode(nextModeName(modes.map((m) => m.name)))}
+          >
+            <PlusIcon className={styles.addCardIcon} aria-hidden />
+            Legg til modus
+          </button>
         </div>
-        <AddMode onAdd={addSizeMode} existing={modes.map((m) => m.name)} />
       </section>
 
       {/* Generated scale */}
@@ -136,38 +153,44 @@ export function SizesPage() {
           Tokenene Designsystemet bruker (0–15, så 18, 22, 26, 30). Skrivebeskyttet
           — endre base, steg eller modus-font-size for å justere.
         </p>
-        <div className={styles.tableWrap}>
-          <table className={styles.scaleTable}>
-            <thead>
-              <tr>
-                <th className={styles.tokenHead}>token</th>
-                {modes.map((m) => (
-                  <th
-                    key={m.name}
-                    className={m.name === activeMode ? styles.colActive : ""}
-                  >
-                    {m.name}
-                    <span className={styles.colSub}>{m.fontSize}px</span>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {SIZE_TOKENS.map((token) => (
-                <tr key={token}>
-                  <th className={styles.tokenCell}>size-{token}</th>
-                  {modes.map((m) => (
-                    <td
-                      key={m.name}
-                      className={m.name === activeMode ? styles.colActive : ""}
-                    >
-                      {sizeValue(base, step, m.fontSize, token)}
-                    </td>
+        <div className={styles.scaleChunks}>
+          {chunk(SIZE_TOKENS, Math.ceil(SIZE_TOKENS.length / 2)).map(
+            (tokens, ci) => (
+              <table key={ci} className={styles.scaleTable}>
+                <thead>
+                  <tr>
+                    <th className={styles.tokenHead}>token</th>
+                    {modes.map((m) => (
+                      <th
+                        key={m.name}
+                        className={m.name === activeMode ? styles.colActive : ""}
+                      >
+                        {m.name}
+                        <span className={styles.colSub}>{m.fontSize}px</span>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {tokens.map((token) => (
+                    <tr key={token}>
+                      <th className={styles.tokenCell}>size-{token}</th>
+                      {modes.map((m) => (
+                        <td
+                          key={m.name}
+                          className={
+                            m.name === activeMode ? styles.colActive : ""
+                          }
+                        >
+                          {sizeValue(base, step, m.fontSize, token)}
+                        </td>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            ),
+          )}
         </div>
       </section>
 
@@ -207,6 +230,19 @@ export function SizesPage() {
 
 function fmt(n: number): string {
   return Number.isInteger(n) ? String(n) : n.toFixed(2);
+}
+
+/** First free "modus-N" name not already taken. */
+function nextModeName(existing: string[]): string {
+  let n = existing.length + 1;
+  while (existing.includes(`modus-${n}`)) n++;
+  return `modus-${n}`;
+}
+
+function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
 }
 
 function NumField({
@@ -249,38 +285,11 @@ function ModeName({
     <input
       className={styles.modeNameInput}
       value={draft}
+      aria-label="Modus-navn"
       onChange={(e) => setDraft(e.target.value)}
       onBlur={() => draft.trim() && draft !== value && onCommit(draft.trim())}
       onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
     />
-  );
-}
-
-function AddMode({
-  onAdd,
-  existing,
-}: {
-  onAdd: (name: string) => void;
-  existing: string[];
-}) {
-  const [name, setName] = useState("");
-  const commit = () => {
-    const v = name.trim();
-    if (v && !existing.includes(v)) onAdd(v);
-    setName("");
-  };
-  return (
-    <div className={styles.addMode}>
-      <input
-        placeholder="f.eks. kompakt"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && commit()}
-      />
-      <button className={styles.addBtn} onClick={commit}>
-        <PlusIcon aria-hidden /> Legg til modus
-      </button>
-    </div>
   );
 }
 

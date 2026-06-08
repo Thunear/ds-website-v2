@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useThemeStore } from "@/theme/ThemeStore";
 import type { FontConfig, SizeMode, TypographyComponent } from "@/theme/config";
 import * as T from "@/theme/typography";
@@ -36,11 +36,13 @@ export function TypographyPage() {
       {/* Steps */}
       <section className={styles.section}>
         <h3>Steg</h3>
-        <p className={styles.sub}>Delte navn på tvers av alle fonter.</p>
+        <p className={styles.sub}>
+          De navngitte trinnene komponentene peker til (f.eks. 1–9), delt på
+          tvers av alle fonter. Hvert steg får en generert px-verdi ut fra
+          fontens anker og forhold.
+        </p>
         <div className={styles.chipGroups}>
           <ChipList
-            title="Steg"
-            description="De navngitte trinnene komponentene peker til (f.eks. 1–7). Hvert steg får en generert px-verdi ut fra fontens anker og forhold."
             items={typo.steps}
             numeric
             onRename={(o, n) => up((t) => T.renameStep(t, o, n))}
@@ -61,6 +63,7 @@ export function TypographyPage() {
               font={font}
               steps={typo.steps}
               modes={modes}
+              activeMode={activeMode}
               canDelete={typo.fonts.length > 1}
             />
           ))}
@@ -123,8 +126,8 @@ function ChipList({
   canRemove,
   numeric = false,
 }: {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   items: string[];
   onRename: (oldName: string, newName: string) => void;
   onRemove: (name: string) => void;
@@ -139,8 +142,8 @@ function ChipList({
   };
   return (
     <div className={styles.chipGroup}>
-      <span className={styles.chipTitle}>{title}</span>
-      <p className={styles.chipDesc}>{description}</p>
+      {title && <span className={styles.chipTitle}>{title}</span>}
+      {description && <p className={styles.chipDesc}>{description}</p>}
       <div className={styles.chips}>
         {items.map((name) => (
           <span key={name} className={styles.chip}>
@@ -189,11 +192,13 @@ function FontCard({
   font,
   steps,
   modes,
+  activeMode,
   canDelete,
 }: {
   font: FontConfig;
   steps: string[];
   modes: SizeMode[];
+  activeMode: string;
   canDelete: boolean;
 }) {
   const { updateTypography: up } = useThemeStore();
@@ -329,6 +334,7 @@ function FontCard({
         </label>
       </div>
 
+      <div className={styles.scaleBody}>
       <table className={styles.sizeTable}>
         <thead>
           <tr>
@@ -399,6 +405,88 @@ function FontCard({
           ))}
         </tbody>
       </table>
+
+        <Specimen
+          font={font}
+          steps={steps}
+          modes={modes}
+          activeMode={activeMode}
+        />
+      </div>
+    </div>
+  );
+}
+
+/** Visual type-scale specimen: a grid of all modes side by side, each step
+    rendered at its generated px so the modular rise (the ratio) is visible. */
+function Specimen({
+  font,
+  steps,
+  modes,
+  activeMode,
+}: {
+  font: FontConfig;
+  steps: string[];
+  modes: SizeMode[];
+  activeMode: string;
+}) {
+  return (
+    <div className={styles.specimen}>
+      <div
+        className={styles.specimenGrid}
+        style={{
+          gridTemplateColumns: `max-content repeat(${modes.length}, max-content)`,
+        }}
+      >
+        <span className={styles.specimenCorner}>steg</span>
+        {modes.map((m) => (
+          <span
+            key={m.name}
+            className={`${styles.specimenHead} ${
+              m.name === activeMode ? styles.specimenHeadActive : ""
+            }`}
+          >
+            {m.name}
+            <span className={styles.specimenHeadPx}>{m.fontSize}px</span>
+          </span>
+        ))}
+        {steps.map((step) => {
+          const isAnchor = step === font.scale.anchorStep;
+          return (
+            <Fragment key={step}>
+              <span className={styles.specimenStepCell}>
+                {step}
+                {isAnchor && (
+                  <span className={styles.specimenAnchor}>anker</span>
+                )}
+              </span>
+              {modes.map((m) => {
+                const size = T.resolveFontSize(
+                  steps,
+                  font,
+                  m.name,
+                  m.fontSize,
+                  step,
+                );
+                return (
+                  <span key={m.name} className={styles.specimenCell}>
+                    <span
+                      className={styles.specimenSample}
+                      style={{
+                        fontFamily: font.fontFamily,
+                        fontSize: `${size}px`,
+                      }}
+                    >
+                      Ag
+                    </span>
+                    <span className={styles.specimenCellPx}>{size}</span>
+                  </span>
+                );
+              })}
+            </Fragment>
+          );
+        })}
+      </div>
     </div>
   );
 }

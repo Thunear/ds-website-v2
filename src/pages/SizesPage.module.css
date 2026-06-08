@@ -144,66 +144,103 @@
   color: var(--app-text-muted);
 }
 
-/* ---------- modes ---------- */
-.modeList {
-  display: flex;
-  flex-wrap: wrap;
+/* ---------- modes (cards) ---------- */
+.modeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: var(--space-3);
   margin-top: var(--space-4);
 }
 
 .modeCard {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-4);
   border: 1px solid var(--app-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--app-surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .modeActive {
   border-color: var(--app-accent);
-  box-shadow: 0 0 0 1px var(--app-accent) inset;
+  box-shadow: 0 0 0 1px var(--app-accent) inset, var(--shadow-sm);
+}
+
+.modeCardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+/* a labelled field — always visible, no hover-only affordances */
+.fieldLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--app-text-muted);
+  flex: 1;
+  min-width: 0;
 }
 
 .modeNameInput {
-  border: none;
-  background: none;
   font: inherit;
   font-size: 15px;
   font-weight: 600;
   color: var(--app-heading);
-  width: 88px;
-  padding: var(--space-1) 0;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--app-surface);
+  padding: var(--space-2);
 }
 
 .modeNameInput:focus {
   outline: none;
-  border-bottom: 1px solid var(--app-accent);
+  border-color: var(--app-accent);
 }
 
-.modeFont {
+.inputWrap {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
-  color: var(--app-text-muted);
   border: 1px solid var(--app-border-strong);
   border-radius: var(--radius-sm);
+  background: var(--app-surface);
   padding: 0 var(--space-2);
-  background: var(--app-surface-2);
+  align-self: flex-start;
 }
 
-.modeFont input {
+.inputWrap:focus-within {
+  border-color: var(--app-accent);
+}
+
+.inputWrap input {
   border: none;
   background: none;
   font: inherit;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--app-text);
-  width: 44px;
+  width: 52px;
   padding: var(--space-2) 0;
-  text-align: right;
+}
+
+.inputWrap input:focus {
+  outline: none;
+}
+
+.modeCardFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-1);
+  border-top: 1px solid var(--app-surface-2);
 }
 
 .unitInfo {
@@ -221,11 +258,17 @@
   padding: 2px 8px;
 }
 
-.linkBtn {
-  border: none;
-  background: none;
-  color: var(--app-accent);
+.previewBtn {
+  border: 1px solid var(--app-border-strong);
+  background: var(--app-surface);
+  color: var(--app-text);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-3);
   font-size: 13px;
+}
+
+.previewBtn:hover {
+  background: var(--app-surface-2);
 }
 
 .iconBtn {
@@ -238,6 +281,7 @@
   background: none;
   color: var(--app-text-muted);
   border-radius: var(--radius-sm);
+  flex: none;
 }
 
 .iconBtn svg {
@@ -250,60 +294,54 @@
   background: var(--app-surface-2);
 }
 
-.addMode {
+/* add-mode is one big button-card; click adds a "modus-N" you then rename */
+.addCard {
   display: flex;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
-}
-
-.addMode input {
-  font: inherit;
-  font-size: 14px;
-  color: var(--app-text);
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--app-border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--app-surface);
-  width: 180px;
-}
-
-.addBtn {
-  display: inline-flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--space-2);
+  min-height: 120px;
+  padding: var(--space-4);
   border: 1px dashed var(--app-border-strong);
+  border-radius: var(--radius-lg);
   background: none;
-  border-radius: var(--radius-sm);
-  padding: var(--space-2) var(--space-3);
   color: var(--app-text-muted);
   font-size: 14px;
+  font-weight: 600;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
-.addBtn:hover {
+.addCard:hover {
   background: var(--app-surface-2);
+  border-color: var(--app-accent);
+  color: var(--app-text);
 }
 
-.addBtn svg {
-  width: 16px;
-  height: 16px;
+.addCardIcon {
+  width: 26px;
+  height: 26px;
 }
 
 /* ---------- generated scale table ---------- */
-.tableWrap {
+.scaleChunks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5) var(--space-6);
   margin-top: var(--space-4);
-  overflow-x: auto;
 }
 
 .scaleTable {
   border-collapse: collapse;
   font-size: 13px;
   font-variant-numeric: tabular-nums;
+  flex: 0 1 auto;
 }
 
 .scaleTable th,
 .scaleTable td {
   text-align: right;
-  padding: var(--space-2) var(--space-4);
+  padding: 5px var(--space-3);
   border-bottom: 1px solid var(--app-surface-2);
 }
 
