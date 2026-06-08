@@ -5,6 +5,7 @@ import { useThemeStore } from "@/themebuilder/theme/ThemeStore";
 import { useAppTheme } from "@/shared/theme/AppThemeProvider";
 import { getFrontTheme } from "@/shared/theme/frontThemes";
 import { SiteHeader } from "@/shared/components/SiteHeader";
+import { SiteFooter } from "@/shared/components/SiteFooter";
 import { ThemeBar } from "./components/ThemeBar";
 import { TabNav } from "./components/TabNav";
 import styles from "./BuilderLayout.module.css";
@@ -64,6 +65,7 @@ export function BuilderLayout() {
           </div>
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

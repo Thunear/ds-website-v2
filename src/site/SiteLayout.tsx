@@ -4,7 +4,7 @@ import { useAppTheme } from "@/shared/theme/AppThemeProvider";
 import { frontThemeVars } from "@/shared/theme/frontThemes";
 import { SiteHeader } from "@/shared/components/SiteHeader";
 import { useFrontTheme } from "./theme/FrontThemeProvider";
-import { SiteFooter } from "./components/SiteFooter";
+import { SiteFooter } from "@/shared/components/SiteFooter";
 import styles from "./SiteLayout.module.css";
 
 /** Shell for the designsystemet.no main site: shared header + page outlet. */

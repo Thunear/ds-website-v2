@@ -7,7 +7,7 @@
 .inner {
   max-width: 1080px;
   margin: 0 auto;
-  padding: var(--space-6) var(--space-5);
+  padding: 56px var(--space-5);
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   gap: var(--space-6);
@@ -17,7 +17,7 @@
   height: 24px;
   width: auto;
   color: #fff;
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 
 .brand p {
@@ -30,7 +30,7 @@
 .col h3 {
   color: #fff;
   font-size: 15px;
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 
 .col ul {

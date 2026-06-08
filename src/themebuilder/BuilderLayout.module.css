@@ -16,6 +16,7 @@
   max-width: var(--content-max);
   margin: 0 auto;
   padding: var(--space-6) var(--space-5) var(--space-6);
+  flex: 1 0 auto;
 }
 
 .card {
