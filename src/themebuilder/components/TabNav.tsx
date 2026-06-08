@@ -12,7 +12,7 @@ import styles from "./TabNav.module.css";
 const TABS = [
   { to: "/temabygger/farger", n: 1, label: "Farger", Icon: PaletteIcon },
   { to: "/temabygger/typografi", n: 2, label: "Typografi", Icon: FileTextIcon },
-  { to: "/temabygger/radius", n: 3, label: "Radius", Icon: SquareIcon },
+  { to: "/temabygger/radius", n: 3, label: "Border radius", Icon: SquareIcon },
   { to: "/temabygger/storrelser", n: 4, label: "Størrelser", Icon: ExpandIcon },
   { to: "/temabygger/ta-i-bruk", n: 5, label: "Ta i bruk", Icon: RocketIcon },
 ];
