@@ -28,6 +28,14 @@ export type ColorGroup = "background" | "surface" | "border" | "text" | "base";
 
 export type ColorMode = "light" | "dark";
 
+/**
+ * How a scale is generated:
+ *  - `normal`: every step takes a tone of the chosen colour.
+ *  - `base-only`: only the base steps are coloured; the rest are neutral grey.
+ *  - `inverted`: the colour anchors the backgrounds; borders/text ramp to white.
+ */
+export type ScaleVariant = "normal" | "base-only" | "inverted";
+
 export interface ColorStep {
   name: ColorStepName;
   group: ColorGroup;

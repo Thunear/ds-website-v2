@@ -1,13 +1,59 @@
 .floating {
-  position: fixed;
+  position: absolute;
   z-index: 1000;
   background: var(--app-surface);
   border: 1px solid var(--app-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: var(--space-5);
-  max-width: 440px;
+  max-width: 600px;
   animation: pop 120ms ease-out;
+}
+
+/* Little arrow pointing at the trigger (a rotated square that merges with the
+   popover edge). The offset (left or top) is set inline to the trigger's centre. */
+.arrowTop,
+.arrowBottom,
+.arrowLeft,
+.arrowRight {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--app-surface);
+}
+
+.arrowTop,
+.arrowBottom {
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.arrowLeft,
+.arrowRight {
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.arrowTop {
+  top: -7px;
+  border-top: 1px solid var(--app-border);
+  border-left: 1px solid var(--app-border);
+}
+
+.arrowBottom {
+  bottom: -7px;
+  border-bottom: 1px solid var(--app-border);
+  border-right: 1px solid var(--app-border);
+}
+
+.arrowLeft {
+  left: -7px;
+  border-bottom: 1px solid var(--app-border);
+  border-left: 1px solid var(--app-border);
+}
+
+.arrowRight {
+  right: -7px;
+  border-top: 1px solid var(--app-border);
+  border-right: 1px solid var(--app-border);
 }
 
 @keyframes pop {

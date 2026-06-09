@@ -44,6 +44,8 @@ export function ScaleRow({
   const derived = deriveScale(scale, mode, luminances);
   const stepByName = new Map(derived.steps.map((s) => [s.name, s]));
   const backgroundHex = stepByName.get("background-default")!.hex;
+  // Same rule (base-default vs surface-tinted >= 3:1) applied to the actual
+  // scale — so an inverted scale warns whenever it genuinely lacks contrast.
   const lowContrast = baseHasLowContrast(
     stepByName.get("base-default")!.hex,
     stepByName.get("surface-tinted")!.hex,
@@ -132,6 +134,10 @@ export function ScaleRow({
                 color={scale.hex}
                 onChange={(hex) => updateScale(scale.id, { hex })}
                 lowContrast={lowContrast}
+                variant={scale.variant ?? "normal"}
+                onVariantChange={(variant) =>
+                  updateScale(scale.id, { variant })
+                }
               />
             </Popover>
           </div>

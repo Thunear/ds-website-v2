@@ -116,4 +116,49 @@ describe("generateColorScale", () => {
     expect(relativeLuminance(stepHex(s, "background-default"))).toBeLessThan(0.1);
     expect(relativeLuminance(stepHex(s, "text-default"))).toBeGreaterThan(0.4);
   });
+
+  describe("inverted", () => {
+    const inv = generateColorScale("accent", "#0062BA", "light", undefined, "inverted");
+
+    it("anchors background-default to the source colour's luminance", () => {
+      expect(relativeLuminance(stepHex(inv, "background-default"))).toBeCloseTo(
+        relativeLuminance("#0062BA"),
+        2,
+      );
+    });
+
+    it("ramps text-default up to ~white", () => {
+      expect(relativeLuminance(stepHex(inv, "text-default"))).toBeGreaterThan(0.9);
+    });
+
+    it("turns base-default into the contrast colour (white for a dark source)", () => {
+      expect(stepHex(inv, "base-default")).toBe("#ffffff");
+      expect(stepHex(inv, "base-contrast-default").toLowerCase()).toBe("#0062ba");
+    });
+  });
+
+  describe("base-only", () => {
+    const bo = generateColorScale("accent", "#0062BA", "light", undefined, "base-only");
+
+    it("makes the contrast steps neutral grey (no chroma)", () => {
+      for (const n of ["background-tinted", "surface-tinted", "border-default", "text-default"] as const) {
+        const c = chroma(stepHex(bo, n)).oklch()[1];
+        expect(c).toBeLessThan(0.02);
+      }
+    });
+
+    it("keeps the base steps coloured", () => {
+      expect(stepHex(bo, "base-default").toLowerCase()).toBe("#0062ba");
+      expect(chroma(stepHex(bo, "base-default")).oklch()[1]).toBeGreaterThan(0.05);
+    });
+
+    it("keeps the same per-step luminance as a normal scale", () => {
+      const normal = generateColorScale("accent", "#0062BA");
+      for (const name of Object.keys(STEP_LUMINANCE.light) as ColorStepName[]) {
+        expect(
+          relativeLuminance(stepHex(bo, name)),
+        ).toBeCloseTo(relativeLuminance(stepHex(normal, name)), 2);
+      }
+    });
+  });
 });

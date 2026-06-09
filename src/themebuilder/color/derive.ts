@@ -94,7 +94,13 @@ export function deriveScale(
   mode: ColorMode,
   luminances: LuminanceMap,
 ): ColorScale {
-  const generated = generateColorScale(cfg.name, cfg.hex, mode, luminances);
+  const generated = generateColorScale(
+    cfg.name,
+    cfg.hex,
+    mode,
+    luminances,
+    cfg.variant,
+  );
   const overrides = cfg.overrides?.[mode];
   const chromaAdjust = cfg.chroma?.[mode];
   if (!overrides && !chromaAdjust) return generated;

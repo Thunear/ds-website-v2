@@ -5,6 +5,7 @@ import {
   type ColorScale,
   type ColorStep,
   type ColorStepName,
+  type ScaleVariant,
 } from "./types";
 import {
   contrastRatio,
@@ -143,20 +144,44 @@ export function generateColorScale(
   baseHex: string,
   mode: ColorMode = "light",
   luminances: LuminanceMap = STEP_LUMINANCE[mode],
+  variant: ScaleVariant = "normal",
 ): ColorScale {
-  const reference = interpolationColor(baseHex, mode);
+  const colourRef = interpolationColor(baseHex, mode);
+  // base-only paints the 11 contrast steps neutral grey; the base steps stay
+  // coloured. Other variants colour the contrast steps from the source colour.
+  const contrastRef =
+    variant === "base-only" ? chroma(colourRef).set("hsl.s", 0).hex() : colourRef;
 
   const stepByName = (n: ColorStepName) => STEP_DEFS.find((s) => s.name === n)!;
 
-  const contrastStep = (n: ContrastStepName): ColorStep => {
-    const def = stepByName(n);
-    const hex = setLuminance(reference, luminances[n]);
-    return { ...def, hex, luminance: relativeLuminance(hex) };
+  // Inverted: anchor backgrounds to the source colour's own luminance and mirror
+  // the canonical (light) luminance shape into [L0, 1]. This keeps backgrounds +
+  // surfaces clustered near the colour (as the normal scale clusters them near
+  // white) and ramps borders/text up to white — preserving contrast
+  // relationships close to the normal scale instead of a flat linear ramp.
+  const baseLuminance = relativeLuminance(colourRef);
+  const shapeMax = STEP_LUMINANCE.light["background-default"]; // 1
+  const shapeMin = STEP_LUMINANCE.light["text-default"]; // ~0.0245
+  // Inverted keeps the surfaces close to surface-default (= the colour): their
+  // upward step toward white is compressed so the surface group stays cohesive.
+  const SURFACE_COMPRESS = 0.4;
+  const targetFor = (n: ContrastStepName) => {
+    if (variant !== "inverted") return luminances[n];
+    let frac = (shapeMax - STEP_LUMINANCE.light[n]) / (shapeMax - shapeMin);
+    if (n.startsWith("surface-")) frac *= SURFACE_COMPRESS;
+    return baseLuminance + (1 - baseLuminance) * frac;
   };
 
-  const contrastSteps = CONTRAST_STEP_NAMES.map(contrastStep);
+  const contrastSteps = CONTRAST_STEP_NAMES.map((n) => {
+    const def = stepByName(n);
+    const hex = setLuminance(contrastRef, targetFor(n));
+    return { ...def, hex, luminance: relativeLuminance(hex) };
+  });
 
-  const baseSteps = generateBaseSteps(baseHex, mode);
+  const baseSteps =
+    variant === "inverted"
+      ? generateInvertedBaseSteps(baseHex)
+      : generateBaseSteps(baseHex, mode);
 
   return {
     name,
@@ -200,6 +225,36 @@ function generateBaseSteps(baseHex: string, mode: ColorMode): ColorStep[] {
     baseDefault,
     preferWhite ? "lighter" : "darker",
   );
+
+  const mk = (name: ColorStepName, hex: string): ColorStep => {
+    const def = STEP_DEFS.find((s) => s.name === name)!;
+    return { ...def, hex, luminance: relativeLuminance(hex) };
+  };
+
+  return [
+    mk("base-default", baseDefault),
+    mk("base-hover", baseHover),
+    mk("base-active", baseActive),
+    mk("base-contrast-subtle", contrastSubtle),
+    mk("base-contrast-default", contrastDefault),
+  ];
+}
+
+/**
+ * Base steps for an inverted scale: the base swaps to the contrasting colour
+ * (white for dark sources), with the source colour carried into the contrast
+ * steps — i.e. a white fill on the coloured surface, with the colour as its text.
+ */
+function generateInvertedBaseSteps(baseHex: string): ColorStep[] {
+  const preferWhite =
+    contrastRatio(baseHex, "#ffffff") >= contrastRatio(baseHex, "#000000");
+  const baseDefault = preferWhite ? "#ffffff" : "#000000";
+
+  const baseHover = chroma.mix(baseDefault, baseHex, 0.1, "rgb").hex();
+  const baseActive = chroma.mix(baseDefault, baseHex, 0.2, "rgb").hex();
+  // Text/elements on the white base: full colour, plus a readable subtle tint.
+  const contrastDefault = baseHex;
+  const contrastSubtle = subtleContrastColor(baseHex, "darker");
 
   const mk = (name: ColorStepName, hex: string): ColorStep => {
     const def = STEP_DEFS.find((s) => s.name === name)!;

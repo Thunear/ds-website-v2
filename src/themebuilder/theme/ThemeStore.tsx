@@ -7,7 +7,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { ColorMode, ColorStepName } from "@/themebuilder/color/types";
+import type {
+  ColorMode,
+  ColorStepName,
+  ScaleVariant,
+} from "@/themebuilder/color/types";
 import { defaultLuminanceArray } from "@/themebuilder/color/scale";
 import { resampleLightness, resizeChroma } from "@/themebuilder/color/derive";
 import * as Sz from "./sizing";
@@ -30,7 +34,7 @@ import {
 
 const STORAGE_KEY = "themebuilder-v2.config";
 /** Bump when the persisted shape or seed defaults change, to drop stale state. */
-const STORAGE_VERSION = 10;
+const STORAGE_VERSION = 12;
 
 /** Seed fields added after a theme was first saved (avoids resetting state). */
 function normalize(config: BuilderConfig): BuilderConfig {
@@ -84,7 +88,10 @@ interface ThemeStore {
 
   // semantic scales (the main grid)
   addScale: (name: string, hex: string) => void;
-  updateScale: (id: string, patch: { name?: string; hex?: string }) => void;
+  updateScale: (
+    id: string,
+    patch: { name?: string; hex?: string; variant?: ScaleVariant },
+  ) => void;
   removeScale: (id: string) => void;
   /** Move a semantic scale up (-1) or down (+1). */
   moveScale: (id: string, direction: -1 | 1) => void;
@@ -217,6 +224,7 @@ export function ThemeStoreProvider({ children }: { children: ReactNode }) {
           // Map the seed colours onto the standard semantic scales by name.
           const byName: Record<string, string> = {
             accent: palette.accent,
+            "accent-inverted": palette.accent,
             brand1: palette.brand1,
             brand2: palette.brand2,
           };

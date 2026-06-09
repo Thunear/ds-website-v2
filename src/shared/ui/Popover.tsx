@@ -1,6 +1,7 @@
 import {
   cloneElement,
   isValidElement,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -17,7 +18,13 @@ type Placement =
   | "bottom-start"
   | "top-start"
   | "bottom-end"
-  | "top-end";
+  | "top-end"
+  | "right"
+  | "left"
+  | "right-start"
+  | "left-start"
+  | "right-end"
+  | "left-end";
 
 interface PopoverProps {
   /** Element that toggles the popover. Must accept onClick + ref. */
@@ -48,26 +55,74 @@ export function Popover({
 
   const anchorRef = useRef<HTMLElement | null>(null);
   const floatingRef = useRef<HTMLDivElement | null>(null);
-  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+  const [pos, setPos] = useState<{
+    top: number;
+    left: number;
+    arrowSide: "top" | "bottom" | "left" | "right";
+    arrowOffset: number;
+  } | null>(null);
 
-  useLayoutEffect(() => {
-    if (!open || !anchorRef.current || !floatingRef.current) return;
+  const updatePosition = useCallback(() => {
+    if (!anchorRef.current || !floatingRef.current) return;
     const a = anchorRef.current.getBoundingClientRect();
     const f = floatingRef.current.getBoundingClientRect();
     const gap = 8;
-    const below = placement.startsWith("bottom");
+    const side = placement.startsWith("left") || placement.startsWith("right");
 
-    let top = below ? a.bottom + gap : a.top - f.height - gap;
+    // Viewport-relative target + which popover edge the arrow sits on.
+    let top: number;
     let left: number;
-    if (placement.endsWith("start")) left = a.left;
-    else if (placement.endsWith("end")) left = a.right - f.width;
-    else left = a.left + a.width / 2 - f.width / 2;
+    let arrowSide: "top" | "bottom" | "left" | "right";
+    let arrowOffset: number;
 
-    // keep within viewport
+    if (side) {
+      const toRight = placement.startsWith("right");
+      left = toRight ? a.right + gap : a.left - f.width - gap;
+      if (placement.endsWith("end")) top = a.bottom - f.height;
+      else if (placement.endsWith("start")) top = a.top;
+      else top = a.top + a.height / 2 - f.height / 2;
+      arrowSide = toRight ? "left" : "right";
+      arrowOffset = a.top + a.height / 2 - top; // vertical, within popover
+    } else {
+      const below = placement.startsWith("bottom");
+      top = below ? a.bottom + gap : a.top - f.height - gap;
+      if (placement.endsWith("end")) left = a.right - f.width;
+      else if (placement.endsWith("start")) left = a.left;
+      else left = a.left + a.width / 2 - f.width / 2;
+      arrowSide = below ? "top" : "bottom";
+      arrowOffset = a.left + a.width / 2 - left; // horizontal, within popover
+    }
+
+    // Keep within the viewport.
     left = Math.max(8, Math.min(left, window.innerWidth - f.width - 8));
     top = Math.max(8, Math.min(top, window.innerHeight - f.height - 8));
-    setPos({ top, left });
-  }, [open, placement]);
+
+    // Clamp the arrow so it stays on the popover edge.
+    const limit = side ? f.height : f.width;
+    arrowOffset = Math.max(16, Math.min(arrowOffset, limit - 16));
+
+    // Position in document space (position:absolute) so it scrolls with the
+    // page glued to the trigger — no per-scroll re-positioning (avoids jitter).
+    setPos({
+      top: top + window.scrollY,
+      left: left + window.scrollX,
+      arrowSide,
+      arrowOffset,
+    });
+  }, [placement]);
+
+  useLayoutEffect(() => {
+    if (open) updatePosition();
+  }, [open, updatePosition]);
+
+  // Recompute on resize (the trigger may shift); scrolling is handled natively
+  // by absolute/document positioning.
+  useEffect(() => {
+    if (!open) return;
+    const onResize = () => updatePosition();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [open, updatePosition]);
 
   useEffect(() => {
     if (!open) return;
@@ -117,6 +172,24 @@ export function Popover({
             }}
             role="dialog"
           >
+            {pos && (
+              <span
+                aria-hidden
+                className={
+                  {
+                    top: styles.arrowTop,
+                    bottom: styles.arrowBottom,
+                    left: styles.arrowLeft,
+                    right: styles.arrowRight,
+                  }[pos.arrowSide]
+                }
+                style={
+                  pos.arrowSide === "top" || pos.arrowSide === "bottom"
+                    ? { left: pos.arrowOffset }
+                    : { top: pos.arrowOffset }
+                }
+              />
+            )}
             {children}
           </div>,
           document.body,

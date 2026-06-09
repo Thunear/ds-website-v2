@@ -5,7 +5,6 @@ import { ColorGridHeader } from "@/themebuilder/components/color/ColorGridHeader
 import { SeveritySection } from "@/themebuilder/components/color/SeveritySection";
 import { LightnessRow } from "@/themebuilder/components/color/LightnessRow";
 import { ContextPreview } from "@/themebuilder/components/color/ContextPreview";
-import { ScaleDetailView } from "@/themebuilder/components/color/ScaleDetailView";
 import { CustomGroupSection } from "@/themebuilder/components/color/CustomGroupSection";
 import { PlusIcon } from "@/shared/ui/icons";
 import styles from "./ColorsPage.module.css";
@@ -89,8 +88,6 @@ export function ColorsPage() {
       <SeveritySection />
 
       <ContextPreview />
-
-      <ScaleDetailView />
     </div>
   );
 }

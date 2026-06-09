@@ -4,7 +4,11 @@
  * only ever reads/writes this shape; everything else (the colour grid, etc.) is
  * derived from it.
  */
-import type { ColorMode, ColorStepName } from "@/themebuilder/color/types";
+import type {
+  ColorMode,
+  ColorStepName,
+  ScaleVariant,
+} from "@/themebuilder/color/types";
 
 /**
  * A semantic scale (the main grid): the user picks a source colour and the 16
@@ -16,6 +20,11 @@ export interface ColorScaleConfig {
   name: string;
   /** The source colour the user picked; the 16 steps are generated from it. */
   hex: string;
+  /**
+   * How the scale is generated (normal | base-only | inverted). Defaults to
+   * "normal" when absent. Applies to both modes.
+   */
+  variant?: ScaleVariant;
   /** Manual per-step hex overrides (per mode) that win over generated values. */
   overrides?: Partial<
     Record<ColorMode, Partial<Record<ColorStepName, string>>>
@@ -291,6 +300,8 @@ export function createTheme(name: string): ThemeConfig {
     name,
     colors: [
       createScale("accent", "#0062BA"),
+      // Inverted twin of accent: same source colour, solid/branded surface.
+      { ...createScale("accent-inverted", "#0062BA"), variant: "inverted" },
       createScale("brand1", "#0D7A5F"),
       createScale("brand2", "#b07ab7"),
       createScale("neutral", "#24272B"),
