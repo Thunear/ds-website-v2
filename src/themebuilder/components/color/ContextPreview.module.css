@@ -25,7 +25,7 @@
 }
 
 .panel {
-  background: var(--c-surface-tinted);
+  background: var(--c-panel);
   border: 1px solid var(--c-border-subtle);
   color: var(--c-text);
   border-radius: var(--radius-lg);

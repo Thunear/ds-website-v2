@@ -69,9 +69,18 @@ function PreviewPanel({
   const [digital, setDigital] = useState(true);
   const [paper, setPaper] = useState(false);
 
+  // Inverted / base-only scales read best on the flat surface-default; the
+  // normal scale keeps the slightly tinted card background.
+  const variant = scale.variant ?? "normal";
+  const panelBg =
+    variant === "inverted" || variant === "base-only"
+      ? c("surface-default")
+      : c("surface-tinted");
+
   // Expose the scale's tokens as CSS vars so the CSS can drive hover/focus/
   // checked states (which inline styles can't).
   const vars = {
+    "--c-panel": panelBg,
     "--c-surface": c("surface-default"),
     "--c-surface-tinted": c("surface-tinted"),
     "--c-surface-hover": c("surface-hover"),
@@ -109,7 +118,7 @@ function PreviewPanel({
       <ColorPickerPopover
         color={scale.hex}
         onChange={(hex) => updateScale(scale.id, { hex })}
-        variant={scale.variant ?? "normal"}
+        variant={variant}
         onVariantChange={(variant) => updateScale(scale.id, { variant })}
         lowContrast={lowContrast}
       />

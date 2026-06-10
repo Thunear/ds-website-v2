@@ -162,19 +162,29 @@ export function generateColorScale(
   const baseLuminance = relativeLuminance(colourRef);
   const shapeMax = STEP_LUMINANCE.light["background-default"]; // 1
   const shapeMin = STEP_LUMINANCE.light["text-default"]; // ~0.0245
-  // Inverted keeps the surfaces close to surface-default (= the colour): their
-  // upward step toward white is compressed so the surface group stays cohesive.
-  const SURFACE_COMPRESS = 0.4;
-  const targetFor = (n: ContrastStepName) => {
-    if (variant !== "inverted") return luminances[n];
-    let frac = (shapeMax - STEP_LUMINANCE.light[n]) / (shapeMax - shapeMin);
-    if (n.startsWith("surface-")) frac *= SURFACE_COMPRESS;
-    return baseLuminance + (1 - baseLuminance) * frac;
-  };
+
+  // Surfaces ramp lighter from surface-default but only gently, so the steps
+  // upward stay subtle (borders/text keep the full ramp to white).
+  const SURFACE_LIGHTEN = 0.45;
+  const surfaceSteps = new Set<string>([
+    "surface-default",
+    "surface-tinted",
+    "surface-hover",
+    "surface-active",
+  ]);
 
   const contrastSteps = CONTRAST_STEP_NAMES.map((n) => {
     const def = stepByName(n);
-    const hex = setLuminance(contrastRef, targetFor(n));
+    let hex: string;
+    if (variant === "inverted") {
+      // surface-default anchors on the colour (its shape luminance is 1, so
+      // frac = 0); surfaces above it, plus borders/text, ramp lighter to white.
+      let frac = (shapeMax - STEP_LUMINANCE.light[n]) / (shapeMax - shapeMin);
+      if (surfaceSteps.has(n)) frac *= SURFACE_LIGHTEN;
+      hex = setLuminance(colourRef, baseLuminance + (1 - baseLuminance) * frac);
+    } else {
+      hex = setLuminance(contrastRef, luminances[n]);
+    }
     return { ...def, hex, luminance: relativeLuminance(hex) };
   });
 
