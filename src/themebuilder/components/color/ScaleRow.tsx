@@ -138,6 +138,8 @@ export function ScaleRow({
                 onVariantChange={(variant) =>
                   updateScale(scale.id, { variant })
                 }
+                muted={scale.muted ?? "neutral"}
+                onMutedChange={(muted) => updateScale(scale.id, { muted })}
               />
             </Popover>
           </div>

@@ -1,5 +1,11 @@
 import { GRID_GROUPS } from "@/themebuilder/color/types";
-import { CONTRAST_STEP_NAMES, defaultLuminanceArray } from "@/themebuilder/color/scale";
+import {
+  CONTRAST_STEP_NAMES,
+  MUTED_STEPS,
+  defaultLuminanceArray,
+  type MutedStepName,
+} from "@/themebuilder/color/scale";
+import { STEP_DEFS } from "@/themebuilder/color/types";
 import { LIGHTNESS_PRESETS, matchPreset } from "@/themebuilder/color/presets";
 import { useThemeStore } from "@/themebuilder/theme/ThemeStore";
 import { ArrowUndoIcon } from "@/shared/ui/icons";
@@ -11,7 +17,8 @@ const round3 = (n: number) => Math.round(n * 1000) / 1000;
 /**
  * Inline lightness editor: a vertical slider per contrast step, aligned with the
  * grid columns and sitting right above the first scale. The Base group is left
- * empty since those steps aren't positioned by the curve.
+ * empty since those steps aren't positioned by the curve, and the Muted steps
+ * show which step they follow instead of a slider.
  */
 export function LightnessRow() {
   const { mode, activeTheme, setLightness, setLightnessCurve, resetLightness } =
@@ -70,6 +77,20 @@ export function LightnessRow() {
               ? null
               : group.steps.map((def) => {
                   const vi = (CONTRAST_STEP_NAMES as string[]).indexOf(def.name);
+                  if (vi === -1) {
+                    // A muted step follows its source step's luminance.
+                    const source = MUTED_STEPS[def.name as MutedStepName];
+                    const label = STEP_DEFS.find((s) => s.name === source)!.label;
+                    return (
+                      <div
+                        key={def.name}
+                        className={`${styles.cell} ${styles.derived}`}
+                        title={`Følger ${label}`}
+                      >
+                        = {label}
+                      </div>
+                    );
+                  }
                   return (
                     <div key={def.name} className={styles.cell}>
                       <ChromaSlider

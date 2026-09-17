@@ -10,6 +10,7 @@ import {
 import type {
   ColorMode,
   ColorStepName,
+  MutedStyle,
   ScaleVariant,
 } from "@/themebuilder/color/types";
 import { defaultLuminanceArray } from "@/themebuilder/color/scale";
@@ -90,7 +91,12 @@ interface ThemeStore {
   addScale: (name: string, hex: string) => void;
   updateScale: (
     id: string,
-    patch: { name?: string; hex?: string; variant?: ScaleVariant },
+    patch: {
+      name?: string;
+      hex?: string;
+      variant?: ScaleVariant;
+      muted?: MutedStyle;
+    },
   ) => void;
   removeScale: (id: string) => void;
   /** Move a semantic scale up (-1) or down (+1). */

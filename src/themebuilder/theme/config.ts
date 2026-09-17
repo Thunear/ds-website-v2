@@ -7,24 +7,30 @@
 import type {
   ColorMode,
   ColorStepName,
+  MutedStyle,
   ScaleVariant,
 } from "@/themebuilder/color/types";
 
 /**
- * A semantic scale (the main grid): the user picks a source colour and the 16
+ * A semantic scale (the main grid): the user picks a source colour and the 19
  * named steps are generated, following the theme's global lightness curve.
  */
 export interface ColorScaleConfig {
   /** Stable id, independent of the (renameable) name. */
   id: string;
   name: string;
-  /** The source colour the user picked; the 16 steps are generated from it. */
+  /** The source colour the user picked; the 19 steps are generated from it. */
   hex: string;
   /**
    * How the scale is generated (normal | base-only | inverted). Defaults to
    * "normal" when absent. Applies to both modes.
    */
   variant?: ScaleVariant;
+  /**
+   * How the muted steps render: "neutral" (default) tones them toward grey for
+   * quiet resting states; "colorful" makes them equal to their source steps.
+   */
+  muted?: MutedStyle;
   /** Manual per-step hex overrides (per mode) that win over generated values. */
   overrides?: Partial<
     Record<ColorMode, Partial<Record<ColorStepName, string>>>

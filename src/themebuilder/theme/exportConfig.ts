@@ -17,7 +17,7 @@
  */
 import type { ColorMode } from "@/themebuilder/color/types";
 import { STEP_DEFS } from "@/themebuilder/color/types";
-import { CONTRAST_STEP_NAMES } from "@/themebuilder/color/scale";
+import { CONTRAST_STEP_NAMES, MUTED_STEPS } from "@/themebuilder/color/scale";
 import { deriveCustomColor, deriveScale, resolveLuminances } from "@/themebuilder/color/derive";
 import { resolveFontSize } from "./typography";
 import {
@@ -54,9 +54,13 @@ function semanticEntry(
   const lightHex = new Map(light.steps.map((s) => [s.name, s.hex]));
   const darkHex = new Map(dark.steps.map((s) => [s.name, s.hex]));
 
+  // Colourful muted steps differ from the generator default, so they are
+  // emitted as explicit values like any other override.
+  const colorfulMuted = scale.muted === "colorful";
   const output: Record<string, StepOverride> = {};
   for (const def of STEP_DEFS) {
     const changed =
+      (colorfulMuted && def.name in MUTED_STEPS) ||
       scale.overrides?.light?.[def.name] !== undefined ||
       scale.overrides?.dark?.[def.name] !== undefined ||
       (scale.chroma?.light?.[def.name] ?? 1) !== 1 ||

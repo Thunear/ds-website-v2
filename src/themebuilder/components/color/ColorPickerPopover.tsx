@@ -1,5 +1,5 @@
 import { HexColorInput, HexColorPicker } from "react-colorful";
-import type { ScaleVariant } from "@/themebuilder/color/types";
+import type { MutedStyle, ScaleVariant } from "@/themebuilder/color/types";
 import { RaindropIcon, WarningIcon } from "@/shared/ui/icons";
 import { eyeDropperSupported, pickColorFromScreen } from "./useEyeDropper";
 import { BASE_CONTRAST_WARNING } from "./contrastWarning";
@@ -13,6 +13,9 @@ interface Props {
   /** When provided, shows the scale-variant chooser in the right column. */
   variant?: ScaleVariant;
   onVariantChange?: (variant: ScaleVariant) => void;
+  /** When provided, shows the muted-step style chooser under the variants. */
+  muted?: MutedStyle;
+  onMutedChange?: (muted: MutedStyle) => void;
 }
 
 const VARIANTS: { value: ScaleVariant; label: string }[] = [
@@ -20,6 +23,16 @@ const VARIANTS: { value: ScaleVariant; label: string }[] = [
   { value: "base-only", label: "Kun base-farger" },
   { value: "inverted", label: "Invertert" },
 ];
+
+const MUTED_STYLES: { value: MutedStyle; label: string }[] = [
+  { value: "neutral", label: "Nøytrale" },
+  { value: "colorful", label: "Fargerike" },
+];
+
+const MUTED_DESC =
+  "Muted-stegene brukes på hviletilstanden til komponenter (kant på input, " +
+  "checkbox og switch). Nøytrale demper fargen så interaksjonsfargene skiller " +
+  "seg ut; Fargerike gir dem full farge.";
 
 const VARIANTS_DESC =
   "Normal gir hele skalaen toner av fargen. Kun base-farger holder resten " +
@@ -32,6 +45,8 @@ export function ColorPickerPopover({
   lowContrast,
   variant = "normal",
   onVariantChange,
+  muted = "neutral",
+  onMutedChange,
 }: Props) {
   return (
     <div className={styles.root}>
@@ -39,7 +54,7 @@ export function ColorPickerPopover({
         <div className={styles.left}>
           <h3>Velg farge</h3>
           <p className={styles.desc}>
-            Velg en kilde-farge. De 16 stegene i skalaen genereres automatisk.
+            Velg en kilde-farge. De 19 stegene i skalaen genereres automatisk.
           </p>
           <HexColorPicker color={color} onChange={onChange} />
           <div className={styles.controls}>
@@ -85,6 +100,31 @@ export function ColorPickerPopover({
                 </button>
               ))}
             </div>
+
+            {onMutedChange && (
+              <>
+                <h4 className={styles.rightTitle}>Muted-steg</h4>
+                <p className={styles.desc}>{MUTED_DESC}</p>
+                <div
+                  className={styles.variants}
+                  role="radiogroup"
+                  aria-label="Muted-steg"
+                >
+                  {MUTED_STYLES.map((m) => (
+                    <button
+                      key={m.value}
+                      type="button"
+                      role="radio"
+                      aria-checked={muted === m.value}
+                      className={muted === m.value ? styles.variantOn : styles.variant}
+                      onClick={() => onMutedChange(m.value)}
+                    >
+                      {m.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>

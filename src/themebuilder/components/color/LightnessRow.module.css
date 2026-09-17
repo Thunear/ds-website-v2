@@ -77,3 +77,15 @@
   width: var(--actions-w);
   flex: none;
 }
+
+/* A muted step has no slider — it follows its source step's luminance. */
+.derived {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: var(--space-2);
+  font-size: 11px;
+  color: var(--app-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+}

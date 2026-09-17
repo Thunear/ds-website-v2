@@ -1,4 +1,3 @@
-import chroma from "chroma-js";
 import type { ColorScaleConfig, CustomColor, ThemeConfig } from "@/themebuilder/theme/config";
 import {
   defaultLuminances,
@@ -7,6 +6,9 @@ import {
   type LuminanceMap,
 } from "./scale";
 import { relativeLuminance, setLuminance } from "./contrast";
+import { applyChromaMultiplier, chromaOf } from "./chroma";
+
+export { applyChromaMultiplier, chromaOf };
 import type { ColorMode, ColorScale, ColorStep } from "./types";
 
 export interface CustomStep {
@@ -51,26 +53,6 @@ export function resizeChroma(values: number[], length: number): number[] {
   return Array.from({ length }, (_, i) => values[i] ?? 1);
 }
 
-/**
- * Scale a colour's OKLCH chroma while keeping its WCAG luminance, so contrast
- * against other steps is preserved (the "safe mode" guarantee).
- */
-export function applyChromaMultiplier(hex: string, multiplier: number): string {
-  const [l, c, h] = chroma(hex).oklch();
-  const adjusted = chroma.oklch(
-    l,
-    Math.max(0, c * multiplier),
-    Number.isNaN(h) ? 0 : h,
-  );
-  return setLuminance(adjusted.hex(), relativeLuminance(hex));
-}
-
-/** The OKLCH chroma of a colour (for display readouts). */
-export function chromaOf(hex: string): number {
-  const c = chroma(hex).oklch()[1];
-  return Number.isNaN(c) ? 0 : c;
-}
-
 /** CSS custom-property name for a step, e.g. --ds-color-accent-border-default. */
 export function cssVarName(scaleName: string, stepName: string): string {
   return `--ds-color-${scaleName}-${stepName}`;
@@ -100,6 +82,7 @@ export function deriveScale(
     mode,
     luminances,
     cfg.variant,
+    cfg.muted,
   );
   const overrides = cfg.overrides?.[mode];
   const chromaAdjust = cfg.chroma?.[mode];

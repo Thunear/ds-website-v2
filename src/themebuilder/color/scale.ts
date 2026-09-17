@@ -5,6 +5,7 @@ import {
   type ColorScale,
   type ColorStep,
   type ColorStepName,
+  type MutedStyle,
   type ScaleVariant,
 } from "./types";
 import {
@@ -14,10 +15,15 @@ import {
   setLuminance,
 } from "./contrast";
 import { lightnessFromHex, luminanceFromLightness } from "./hsluv";
+import { muteColor } from "./chroma";
 
-/** The 11 non-base steps that are positioned purely by relative luminance. */
+/** The 3 "muted" steps: a contrast step's luminance with reduced chroma. */
+export type MutedStepName = "surface-muted" | "border-muted" | "text-muted";
+
+/** The 11 non-base, non-muted steps positioned purely by relative luminance. */
 export type ContrastStepName = Exclude<
   ColorStepName,
+  | MutedStepName
   | "base-default"
   | "base-hover"
   | "base-active"
@@ -63,6 +69,17 @@ export const STEP_LUMINANCE: Record<
     "text-subtle": 0.39,
     "text-default": 0.84,
   },
+};
+
+/**
+ * Which contrast step each muted step takes its luminance from. The muted step
+ * has identical contrast to its source but sits closer to neutral, for the
+ * resting state of components (a checkbox or switch border, quiet text).
+ */
+export const MUTED_STEPS: Record<MutedStepName, ContrastStepName> = {
+  "surface-muted": "surface-tinted",
+  "border-muted": "border-default",
+  "text-muted": "text-subtle",
 };
 
 /** OKLCH chroma multiplier applied to the dark-mode reference colour. */
@@ -136,8 +153,9 @@ export function defaultLuminanceArray(mode: ColorMode): number[] {
 }
 
 /**
- * Generate the full 16-step scale for a chosen colour in a given mode.
- * Pass `luminances` to override the per-step targets (e.g. a custom curve).
+ * Generate the full 19-step scale for a chosen colour in a given mode.
+* Pass `luminances` to override the per-step targets (e.g. a custom curve).
+ * `muted` picks neutral (toned-down) or colourful (= source) muted steps.
  */
 export function generateColorScale(
   name: string,
@@ -145,6 +163,7 @@ export function generateColorScale(
   mode: ColorMode = "light",
   luminances: LuminanceMap = STEP_LUMINANCE[mode],
   variant: ScaleVariant = "normal",
+  muted: MutedStyle = "neutral",
 ): ColorScale {
   const colourRef = interpolationColor(baseHex, mode);
   // base-only paints the 11 contrast steps neutral grey; the base steps stay
@@ -188,16 +207,29 @@ export function generateColorScale(
     return { ...def, hex, luminance: relativeLuminance(hex) };
   });
 
+  // Muted steps: same luminance as their source (so contrast is unchanged),
+  // chroma pulled toward neutral. Derived from the generated source step so
+  // they follow the curve, the variant and the dark-mode reference alike.
+  const mutedSteps = (Object.keys(MUTED_STEPS) as MutedStepName[]).map((n) => {
+    const source = contrastSteps.find((s) => s.name === MUTED_STEPS[n])!;
+    const hex = muted === "colorful" ? source.hex : muteColor(source.hex);
+    return { ...stepByName(n), hex, luminance: relativeLuminance(hex) };
+  });
+
   const baseSteps =
     variant === "inverted"
       ? generateInvertedBaseSteps(baseHex)
       : generateBaseSteps(baseHex, mode);
 
+  // Emit in grid (STEP_DEFS) order.
+  const byName = new Map(
+    [...contrastSteps, ...mutedSteps, ...baseSteps].map((s) => [s.name, s]),
+  );
   return {
     name,
     baseHex,
     mode,
-    steps: [...contrastSteps, ...baseSteps],
+    steps: STEP_DEFS.map((d) => byName.get(d.name)!),
   };
 }
 

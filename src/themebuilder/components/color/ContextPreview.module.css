@@ -16,48 +16,38 @@
   margin-top: var(--space-2);
 }
 
-/* Two larger panels side by side. */
-.panels {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-5);
+/* One block per scale, stacked. */
+.scales {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
   margin-top: var(--space-5);
 }
 
-.panel {
-  background: var(--c-panel);
-  border: 1px solid var(--c-border-subtle);
-  color: var(--c-text);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.panelHead {
+.scaleHead {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-3);
+  margin-bottom: var(--space-3);
 }
 
-/* Colour control: swatch + name + hex + palette, opens the picker. */
+/* Colour control: swatch + name + hex + palette, opens the picker. Sits outside
+   the panels, so it uses the app tokens rather than the scale's. */
 .colorBtn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
   font: inherit;
   padding: var(--space-1) var(--space-3) var(--space-1) var(--space-2);
-  border: 1px solid var(--c-border);
-  background: var(--c-surface);
-  color: var(--c-text);
+  border: 1px solid var(--app-border-strong);
+  background: var(--app-surface);
+  color: var(--app-text);
   border-radius: var(--radius-pill);
   cursor: pointer;
 }
 
 .colorBtn:hover {
-  background: var(--c-surface-hover);
+  background: var(--app-surface-2);
 }
 
 .colorChip {
@@ -65,7 +55,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 1px solid var(--c-border);
+  border: 1px solid var(--app-border);
 }
 
 .colorName {
@@ -76,115 +66,107 @@
 .colorHex {
   font-size: 13px;
   letter-spacing: 0.02em;
-  color: var(--c-text-subtle);
+  color: var(--app-text-muted);
 }
 
 .colorPalette {
   width: 16px;
   height: 16px;
-  color: var(--c-text-subtle);
+  color: var(--app-text-muted);
 }
 
-.status {
+.badge {
   font-size: 12px;
-  font-weight: 700;
-  padding: 3px var(--space-2);
-  border-radius: var(--radius-pill);
-  white-space: nowrap;
-  background: var(--c-base);
-  color: var(--c-on-base);
+  color: var(--app-text-muted);
 }
 
-.title {
-  font-size: 19px;
-  font-weight: 700;
+/* Light and dark panel side by side. */
+.pair {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
 }
 
-.help {
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--c-text-subtle);
-  margin-top: calc(-1 * var(--space-3));
+.panelWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.panelCaption {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-text-muted);
+}
+
+/* The card: sits on surface-muted (near-neutral by default), with a subtle
+   coloured edge. Everything inside is driven by the scale's --c-* tokens. */
+.panel {
+  background: var(--c-panel);
+  border: 1px solid var(--c-border-subtle);
+  color: var(--c-text);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-5);
 }
 
 /* Fields ----------------------------------------------------------------- */
 .field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
+  align-self: stretch;
+}
+
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
 }
 
 .label {
   font-size: 14px;
   font-weight: 600;
   color: var(--c-text);
+  padding: 0;
 }
 
+/* Input: resting border is muted; focus brings in the interaction colour. */
 .input {
   font: inherit;
   font-size: 14px;
   height: 42px;
   padding: 0 var(--space-3);
-  border: 1px solid var(--c-border);
+  border: 1px solid var(--c-border-muted);
   border-radius: var(--radius-md);
   background: var(--c-surface);
   color: var(--c-text);
   width: 100%;
+  max-width: 220px;
   box-sizing: border-box;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
 }
 
 .input::placeholder {
-  color: var(--c-text-subtle);
+  color: var(--c-text-muted);
+}
+
+.input:hover {
+  border-color: var(--c-border);
 }
 
 .input:focus {
   outline: none;
   border-color: var(--c-base);
   box-shadow: inset 0 0 0 1px var(--c-base);
-}
-
-/* Switch ----------------------------------------------------------------- */
-.switchRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  padding: var(--space-3) 0;
-  border-top: 1px solid var(--c-border-subtle);
-  border-bottom: 1px solid var(--c-border-subtle);
-}
-
-.switch {
-  flex: none;
-  position: relative;
-  width: 40px;
-  height: 24px;
-  border: none;
-  padding: 0;
-  border-radius: var(--radius-pill);
-  background: var(--c-surface);
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.switch[data-on] {
-  background: var(--c-base);
-}
-
-.knob {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 18px;
-  height: 18px;
-  border-radius: var(--radius-pill);
-  background: var(--c-base);
-  transition: left 0.15s ease, background 0.15s ease;
-}
-
-.switch[data-on] .knob {
-  left: 19px;
-  background: var(--c-on-base);
 }
 
 /* Checks ----------------------------------------------------------------- */
@@ -207,6 +189,8 @@
   cursor: pointer;
 }
 
+/* Unchecked box: muted border (same contrast as border-default). Hover shows
+   the interaction colour; checked fills with base. */
 .box {
   flex: none;
   display: inline-flex;
@@ -214,16 +198,25 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  border: 2px solid var(--c-border);
+  border: 2px solid var(--c-border-muted);
   background: var(--c-surface);
   border-radius: var(--radius-sm);
   box-sizing: border-box;
   transition: background 0.12s ease, border-color 0.12s ease;
 }
 
+.check:hover .box {
+  border-color: var(--c-border);
+}
+
 .box[data-on] {
   background: var(--c-base);
   border-color: var(--c-base);
+}
+
+.check:hover .box[data-on] {
+  background: var(--c-base-hover);
+  border-color: var(--c-base-hover);
 }
 
 .box svg {
@@ -232,50 +225,100 @@
   color: var(--c-on-base);
 }
 
-/* Buttons ---------------------------------------------------------------- */
-.buttons {
+/* Switch ----------------------------------------------------------------- */
+.switches {
   display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.switchRow {
+  display: inline-flex;
+  align-items: center;
   gap: var(--space-2);
-  margin-top: var(--space-1);
-}
-
-.primary,
-.secondary {
-  font: inherit;
   font-size: 14px;
-  font-weight: 600;
-  padding: var(--space-2) var(--space-5);
-  border-radius: var(--radius-md);
-  border: 1px solid transparent;
+  color: var(--c-text);
+}
+
+.switchLabel {
+  cursor: default;
+}
+
+/* Off: muted border and a muted knob on the flat surface. On: base track with
+   the contrast knob. Hover on the off state reveals the interaction colour. */
+.switch {
+  flex: none;
+  position: relative;
+  width: 40px;
+  height: 24px;
+  box-sizing: border-box;
+  border: 2px solid var(--c-border-muted);
+  padding: 0;
+  border-radius: var(--radius-pill);
+  background: var(--c-surface);
   cursor: pointer;
-  transition: background 0.12s ease;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.primary {
+.switch:hover {
+  border-color: var(--c-border);
+}
+
+.switch[data-on] {
   background: var(--c-base);
-  color: var(--c-on-base);
+  border-color: var(--c-base);
 }
 
-.primary:hover {
+.switch[data-on]:hover {
   background: var(--c-base-hover);
+  border-color: var(--c-base-hover);
 }
 
-.primary:active {
-  background: var(--c-base-active);
+.knob {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+  background: var(--c-text-muted);
+  transition: left 0.15s ease, background 0.15s ease;
 }
 
-.secondary {
-  background: transparent;
+.switch:hover .knob {
+  background: var(--c-text-subtle);
+}
+
+.switch[data-on] .knob {
+  left: 17px;
+  background: var(--c-on-base);
+}
+
+/* Tag: intentionally keeps the colour (tinted surface + coloured border/text),
+   so the coloured pattern is visible next to the muted resting states. */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px var(--space-3) 3px var(--space-2);
+  border-radius: var(--radius-pill);
   border: 1px solid var(--c-border);
-  color: var(--c-base);
+  background: var(--c-surface-tinted);
+  color: var(--c-text-subtle);
 }
 
-.secondary:hover {
-  background: var(--c-surface-hover);
+.tagDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--c-border-strong);
+  box-sizing: border-box;
 }
 
 @media (max-width: 720px) {
-  .panels {
+  .pair {
     grid-template-columns: 1fr;
   }
 }

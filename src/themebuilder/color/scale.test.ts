@@ -4,18 +4,22 @@ import {
   defaultLuminances,
   generateColorScale,
   interpolationColor,
+  MUTED_STEPS,
   STEP_LUMINANCE,
+  type MutedStepName,
 } from "./scale";
 import { contrastRatio, relativeLuminance } from "./contrast";
-import type { ColorStepName } from "./types";
+import { MUTED_CHROMA_MAX } from "./chroma";
+import { STEP_DEFS, type ColorStepName } from "./types";
 
 const stepHex = (scale: ReturnType<typeof generateColorScale>, n: ColorStepName) =>
   scale.steps.find((s) => s.name === n)!.hex;
 
 describe("generateColorScale", () => {
-  it("produces all 16 steps", () => {
+  it("produces all 19 steps in grid order", () => {
     const scale = generateColorScale("accent", "#0062BA");
-    expect(scale.steps).toHaveLength(16);
+    expect(scale.steps).toHaveLength(19);
+    expect(scale.steps.map((s) => s.name)).toEqual(STEP_DEFS.map((d) => d.name));
   });
 
   it("keeps the same relative luminance per step across different scales", () => {
@@ -160,5 +164,79 @@ describe("generateColorScale", () => {
         ).toBeCloseTo(relativeLuminance(stepHex(normal, name)), 2);
       }
     });
+  });
+});
+
+describe("muted steps", () => {
+  const samples = ["#0062BA", "#0D7A5F", "#5B3FA0", "#F5D90A", "#C01B1B", "#E8641B", "#1E2B3C"];
+  const mutedNames = Object.keys(MUTED_STEPS) as MutedStepName[];
+  const oklchChroma = (hex: string) => chroma(hex).oklch()[1] || 0;
+
+  it("keep the exact luminance (and so the contrast) of their source step", () => {
+    for (const hex of samples) {
+      for (const mode of ["light", "dark"] as const) {
+        const s = generateColorScale("c", hex, mode);
+        for (const n of mutedNames) {
+          expect(relativeLuminance(stepHex(s, n))).toBeCloseTo(
+            relativeLuminance(stepHex(s, MUTED_STEPS[n])),
+            2,
+          );
+        }
+      }
+    }
+  });
+
+  it("are less colourful than their source and capped near neutral", () => {
+    for (const hex of samples) {
+      for (const mode of ["light", "dark"] as const) {
+        const s = generateColorScale("c", hex, mode);
+        for (const n of mutedNames) {
+          const muted = oklchChroma(stepHex(s, n));
+          const source = oklchChroma(stepHex(s, MUTED_STEPS[n]));
+          if (source > 0.001) expect(muted).toBeLessThan(source);
+          // Re-fitting the luminance can nudge chroma a hair past the cap.
+          expect(muted).toBeLessThanOrEqual(MUTED_CHROMA_MAX + 0.01);
+        }
+      }
+    }
+  });
+
+  it("keep a hint of the hue for a vivid source (not pure grey)", () => {
+    const s = generateColorScale("accent", "#0062BA");
+    const source = chroma("#0062BA").oklch()[2];
+    for (const n of ["border-muted", "text-muted"] as const) {
+      const [, c, h] = chroma(stepHex(s, n)).oklch();
+      expect(c).toBeGreaterThan(0.015);
+      // Hue preserved (within a few degrees).
+      expect(Math.abs(((h - source + 540) % 360) - 180)).toBeLessThan(8);
+    }
+  });
+
+  it("follow a custom luminance curve through their source step", () => {
+    const custom = defaultLuminances("light");
+    custom["border-default"] = 0.4;
+    const s = generateColorScale("accent", "#0062BA", "light", custom);
+    expect(relativeLuminance(stepHex(s, "border-muted"))).toBeCloseTo(0.4, 2);
+  });
+
+  it("stay neutral grey on a base-only scale", () => {
+    const bo = generateColorScale("accent", "#0062BA", "light", undefined, "base-only");
+    for (const n of mutedNames) expect(oklchChroma(stepHex(bo, n))).toBeLessThan(0.02);
+  });
+});
+
+describe("colourful muted style", () => {
+  it("makes each muted step identical to its source step", () => {
+    for (const mode of ["light", "dark"] as const) {
+      const s = generateColorScale("accent", "#0062BA", mode, undefined, "normal", "colorful");
+      for (const n of Object.keys(MUTED_STEPS) as MutedStepName[]) {
+        expect(stepHex(s, n)).toBe(stepHex(s, MUTED_STEPS[n]));
+      }
+    }
+  });
+
+  it("defaults to neutral (muted differs from source)", () => {
+    const s = generateColorScale("accent", "#0062BA");
+    expect(stepHex(s, "border-muted")).not.toBe(stepHex(s, "border-default"));
   });
 });

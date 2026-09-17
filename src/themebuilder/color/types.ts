@@ -1,9 +1,11 @@
 /**
- * The 16 generated steps of a Designsystemet-style colour scale.
+ * The 19 generated steps of a Designsystemet-style colour scale.
  *
- * The first 11 steps (background → text) are "contrast steps": every scale
- * shares the same target relative luminance per step, so the contrast between
- * any two steps is identical across every scale in the theme. The final 5
+ * 11 steps (background → text) are "contrast steps": every scale shares the
+ * same target relative luminance per step, so the contrast between any two
+ * steps is identical across every scale in the theme. 3 "muted" steps (one each
+ * for surface, border and text) copy a contrast step's luminance with reduced
+ * chroma, so they keep its contrast but read closer to neutral. The final 5
  * "base" steps are derived from the user's chosen colour directly.
  */
 export type ColorStepName =
@@ -13,11 +15,14 @@ export type ColorStepName =
   | "surface-tinted"
   | "surface-hover"
   | "surface-active"
+  | "surface-muted"
   | "border-subtle"
   | "border-default"
   | "border-strong"
+  | "border-muted"
   | "text-subtle"
   | "text-default"
+  | "text-muted"
   | "base-default"
   | "base-hover"
   | "base-active"
@@ -35,6 +40,13 @@ export type ColorMode = "light" | "dark";
  *  - `inverted`: the colour anchors the backgrounds; borders/text ramp to white.
  */
 export type ScaleVariant = "normal" | "base-only" | "inverted";
+
+/**
+ * How the 3 muted steps are rendered:
+ *  - `neutral`: chroma pulled toward grey (default) — quiet resting states.
+ *  - `colorful`: identical to their source steps — fully coloured components.
+ */
+export type MutedStyle = "neutral" | "colorful";
 
 export interface ColorStep {
   name: ColorStepName;
@@ -67,11 +79,14 @@ export const STEP_DEFS: Array<{
   { name: "surface-tinted", group: "surface", label: "Tinted" },
   { name: "surface-hover", group: "surface", label: "Hover" },
   { name: "surface-active", group: "surface", label: "Active" },
+  { name: "surface-muted", group: "surface", label: "Muted" },
   { name: "border-subtle", group: "border", label: "Subtle" },
   { name: "border-default", group: "border", label: "Default" },
   { name: "border-strong", group: "border", label: "Strong" },
+  { name: "border-muted", group: "border", label: "Muted" },
   { name: "text-subtle", group: "text", label: "Subtle" },
   { name: "text-default", group: "text", label: "Default" },
+  { name: "text-muted", group: "text", label: "Muted" },
   { name: "base-default", group: "base", label: "Default" },
   { name: "base-hover", group: "base", label: "Hover" },
   { name: "base-active", group: "base", label: "Active" },
